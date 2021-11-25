@@ -1,93 +1,167 @@
-## Ejemplo 3: Usar Spring boot para crear un microservicio
+## Ejemplo 3: Pruebas integrales con TestRestTemplate
 
-### Objetivos
-* Spring boot WebFlux
+### Objetivo
 
-### Prerequisitos
-* Maven
-* JDK 11
-* Postman
+- Crear una prueba integral que valide el funcionamiento de todos los componentes de una funcionalidad.
 
-### Procedimiento
+#### Requisitos
+- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
+- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
 
-1. Crea el proyecto demo con la dependencia de spring reactive web
-2. Descomprimir el proyecto
-3. Abrir el proyecto con su IDE preferido y crear un paquete llamado "entity" el cual contenga la clase "Empleado" con el siguiente codigo:
+
+#### Desarrollo
+
+1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
+
+2. En la ventana que se abre selecciona las siguientes opciones:
+- Grupo, artefacto y nombre del proyecto.
+- Tipo de proyecto: **Maven Project**.
+- Lenguaje: **Java**.
+- Forma de empaquetar la aplicación: **jar**.
+- Versión de Java: **11**.
+
+3. En la siguiente ventana elige **Spring Web** y **Lombok** como dependencias del proyecto. En automático se agregarán también las dependencias para realizar pruebas unitarias.
+
+4. Dale un nombre y una ubicación al proyecto y presiona el botón *Finish*.
+
+5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion7.ejemplo3`. Dentro crea los subpaquetes: `controllers`, `model`, `persistence` y `services`.
+
+6. Dentro del paquete `model` crea una clase `Cliente` con los siguientes atributos, y las anotaciones `@Data` y `@Builder`:
 ```java
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class Empleado {
-        
-        private String id;
-        private String nombre;
-    }
-```
-4. Crear un paquete llamado "repository" el cual contenga la clase "EmpleadoRepository" con el siguiente codigo:
-```java
-    @Repository
-    public class EmpleadoRepository {
-        static Map<String,Empleado> empleadoData;
-
-        static
-        {
-            empleadoData = new HashMap<>();
-            empleadoData.put("1",new Empleado("1","Empleado 1"));
-            empleadoData.put("2",new Empleado("2","Empleado 2"));
-            empleadoData.put("3",new Empleado("3","Empleado 3"));
-            empleadoData.put("4",new Empleado("4","Empleado 4"));
-            empleadoData.put("5",new Empleado("5","Empleado 5"));
-            empleadoData.put("6",new Empleado("6","Empleado 6"));
-            empleadoData.put("7",new Empleado("7","Empleado 7"));
-            empleadoData.put("8",new Empleado("8","Empleado 8"));
-            empleadoData.put("9",new Empleado("9","Empleado 9"));
-            empleadoData.put("10",new Empleado("10","Empleado 10"));
-            
-        }
-        
-        public Mono<Empleado> findEmpleadoById(String id)
-        {
-            return Mono.just(empleadoData.get(id));
-        }
-        
-        public Flux<Empleado> findAllEmpleados()
-        {
-            return Flux.fromIterable(empleadoData.values());
-        }
-        
-        public Mono<Empleado> updateEmpleado(Empleado employee)
-        {
-            Empleado existeEmpleado=empleadoData.get(employee.getId());
-            if(existeEmpleado!=null)
-            {
-                existeEmpleado.setNombre(employee.getNombre());
-            }
-            return Mono.just(existeEmpleado);
-        }
-    }
+@Data
+@Builder
+public class Cliente {
+    private Long id;
+    private String nombre;
+    private String correoContacto;
+    private int numeroEmpleados;
+    private String direccion;
+}
 ```
 
+7. Dentro del paquete `persistence` crea una clase llamada `ClienteRepository`, decorada con la anotación `@Repository`, y agrega dos métodos, el primero para guardar un Cliente y el segundo para recuperar un cliente por su identificador. Como no queremos complicar mucho el ejemplo, esta funcionalidad será solo simulada de la siguiente forma:
+```java
+@Repository
+public class ClienteRepository {
 
-4. Crear un paquete llamado "controller" el cual contenga la clase "DemoController" con el siguiente codigo:
+    public Cliente save(Cliente cliente) {
+
+        Cliente clienteDb = Cliente.builder()
+                .id(1L)
+                .nombre(cliente.getNombre())
+                .correoContacto(cliente.getCorreoContacto())
+                .direccion(cliente.getDireccion())
+                .numeroEmpleados(cliente.getNumeroEmpleados())
+                .build();
+
+        return clienteDb;
+    }
+
+    public Optional<Cliente> findById(Long clienteId) {
+        Cliente clienteDb = Cliente.builder()
+                .id(clienteId)
+                .nombre("Nombre del cliente")
+                .correoContacto("correo@cliente.com")
+                .direccion("Direccion del cliente")
+                .numeroEmpleados(20)
+                .build();
+
+        return Optional.of(clienteDb);
+    }
+}
+```
+
+8. En el paquete `services` crea una clase llamada `ClienteService` y decórala con la anotación `@Service` de Spring.
+
+```java
+@Service
+public class ClienteService {
+}
+```
+
+9. Coloca tres métodos dentro de esta clase, uno para guardar a un `Cliente` y otro para recuperarlo por su id. Usa una instancia de `ClienteRepository` para delegarle estas funcionalidades:
+```java
+@Service
+@RequiredArgsConstructor
+public class ClienteService {
+
+    private final ClienteRepository clienteRepository;
+
+    public Cliente guardaCliente(Cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
+
+    public Optional<Cliente> obtenCliente(Long clienteId) {
+        return clienteRepository.findById(clienteId);
+    }
+}
+```
+
+10. En el paquete `controllers` agrega una clase `ClienteController` y decórala con `@RestController`. Esta clase será el punto de entrada de las peticiones y delegará sus funcionalidades a `ClienteService`:
 ```java
     @RestController
-    @RequestMapping("/empleados")
-    public class DemoController {
-        
-        @Autowired
-        private EmpleadoRepository empleadoRepository;
+    @RequestMapping("/cliente")
+    @RequiredArgsConstructor
+    public class ClienteController {
 
-        @GetMapping
-        private Flux<Empleado> getAllEmpleados() {
-            return empleadoRepository.findAllEmpleados();
+    private final ClienteService clienteService;
+
+    @PostMapping
+    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente) {
+
+        Cliente clienteNuevo = clienteService.guardaCliente(cliente);
+
+        return ResponseEntity.created(URI.create(String.valueOf(clienteNuevo.getId()))).build();
+    }
+
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<Cliente> getCliente(@PathVariable Long clienteId) {
+
+        Optional<Cliente> clienteDb = clienteService.obtenCliente(clienteId);
+        if (clienteDb.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El cliente especificado no existe.");
         }
 
+        return ResponseEntity.ok(clienteDb.get());
+    }
+}
+```
+
+11. En el directorio de pruebas de Maven agrega una nueva clase llamada `ClienteControllerTest`.
+
+12. Decora la nueva clase con la anotación `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)`
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class ClienteControllerTest {
+
+}
+```
+
+13. Agrega una instancia de tipo `TestRestTemplate` y decórala con la anotación `@Autowired`:
+
+```java
+    @Autowired
+    private TestRestTemplate restTemplate;
+```
+
+14. Crea un método llamado `obtenClienteTest`y decóralo con la anotación `@Test`:
+```java
+   @Test
+    public void obtenClienteTest() throws Exception {
+        
     }
 ```
 
-5. Una vez terminado lo ejecutamos y abrimos postman y colocamos la informacion como se ve en la imagen:
+15. Dentro de este método usa el método `getForEntity` de la nstancia de `restTemplate` para hacer una petición a la URL `/cliente/1`, que es manejada por `ClienteController`
+```java
+    ResponseEntity<Cliente> response = restTemplate.getForEntity("/cliente/1", Cliente.class);
 
-    ![Postman](img/post2.PNG)
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(response.getBody().getId(), equalTo(1L));
+```
 
+16. Ejecuta la prueba haciendo clic derecho sobre el editor de código y seleccionando la opción `Run ClienteControllerTest` o haciendo clic sobre las dos flechas verdes que aparecen junto al nombre de la clase.
 
-6. Damos click en Send y se mostrara en consola la informacion que colocamos en nuestro EmpoleadoRepository
+17. Debes ver el siguiente resultado en la consola de IntelliJ:
+
+![imagen](img/img_01.png)

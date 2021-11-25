@@ -1,7 +1,40 @@
-## Postwork 03
+## Postwork Sesión 03
 
-A lo largo de este proyecto reafirmaremos lo que se ha aprendido durante las sesiones.
+### Objetivo
+- Agregar validaciones a los atributos de las clases que representan el modelo de negocio de la aplicación.
+- Agregar un manejador de excepciones global para errores de validaciones y para errores generales de la aplicación, que pueda ser extendido conforme se agregan más - funcionalidades y reglas de negocio.
 
-### Módulo 3 - Programación funcional
 
-Crea una clase que reciba un objeto Curso y que pueda generar una lista de calificaciones ordenada por orden alfabético (ascendente) o por calificaciones (descendente).
+
+#### Desarrollo   
+
+1. Agrega las validaciones que consideres necesarias. Puedes elegir las validaciones de la siguiente lista:
+- @NotNull
+- @Null
+- @AssertFalse
+- @AssertTrue
+- @DecimalMax
+- @DecimalMin
+- @Digits
+- @Size
+- @Min
+- @Max
+- @Email
+- @NotEmpty
+- @NotBlank
+- @Pattern
+- @Positive y @PositiveOrZero
+- @Negative y @NegativeOrZero
+- @Past y @PastOrPresent
+- @Future y @FutureOrPresent
+
+2. Agrega un manejador global de errores usando la anotación `@RestControllerAdvice`.
+
+3. Agrega un manejador global de errores usando la anotación `@ExceptionHandler(MethodArgumentNotValidException.class)`.
+
+3. Agrega un manejador global de errores usando la anotación `@ExceptionHandler(Exception.class)`.
+
+La estructura de tu proyecto debe quedar de la siguiente forma:
+
+![imagen](img/img_01.png)
+

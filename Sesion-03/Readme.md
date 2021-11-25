@@ -1,23 +1,22 @@
 
-## Sesión 03: Programación Funcional
+# Sesión 3: Spring MVC Validation
 
-### OBJETIVOS 
+## Objetivos
+- Usar validaciones de una forma sencilla para validaciones de datos que llegan a un servicio
+- Aprender a manejar errores ocurridos en las validaciones
+- Usar un componente de Spring creado para manejo de errores
 
-- Conocer el paradigma de Programación Funcional.
-- Aprender a usar las características funcionales de Java.
+## Organización de la clase
+- Validaciones de Java Beans
+  - [Ejemplo 1](Ejemplo-01)
+  - [Reto 1](Reto-01)
+  
+- Manejo de errores en validaciones
+  - [Ejemplo 2](Ejemplo-02)
+  - [Reto 2](Reto-02)
+  
+- Spring MCV Controller Advice
+  - [Ejemplo 3](Ejemplo-03)
+  - [Reto 3](Reto-03)
 
-
-#### ORGANIZACION DE LA CLASE 
-
-- Definición e implementación de interfaces funcionales:
-	- [Ejemplo 01](Ejemplo-01)
-	- [Reto 01](Reto-01)
-	
-- High Order Functions	
-	- [Ejemplo 02](Ejemplo-02)
-	- [Reto 02](Reto-02)
-	
- - Streams	
-	- [Ejemplo 03](Ejemplo-03)
-	- [Reto 03](Reto-03)
 

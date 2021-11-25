@@ -1,57 +1,116 @@
+## Ejemplo 3: Uso de la consola embebdida H2 para manejar la base de datos
 
-## Ejemplo 03: Clases Genéricas
+### Objetivo
+- Usar la consola integrada con la base de datos embebida H2 para conectarnos a la instancia de MySQL.
+- Proporcionar un mecanismo sencillo para poder adminsitrar la información de la base de datos sin herramientas externas.
 
-### Objetivos
-* Crear una clase que use _Generics_ con un límite para poder usar métodos del tipo superior.
+#### Requisitos
+- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
+- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
+- Tener instalada la base de datos MySQL y los datos del usuario para conectarse
 
-### Procedimiento
 
-1. Crea una clase de prueba con el siguiente código
+#### Desarrollo
+
+1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
+
+2. En la ventana que se abre selecciona las siguientes opciones:
+- Grupo, artefacto y nombre del proyecto.
+- Tipo de proyecto: **Maven Project**.
+- Lenguaje: **Java**.
+- Forma de empaquetar la aplicación: **jar**.
+- Versión de Java: **11**.
+
+3. En la siguiente ventana elige **Spring Web**, **Lombok**, **Spring Data JPA** y **MySQL Driver** como dependencia del proyecto.
+
+4. Dale un nombre y una ubicación al proyecto y presiona el botón *Finish*.
+
+5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion6.ejemplo3`. Dentro crea los subpaquetes: `model` y `persistence`.
+
+6. Dentro del paquete `model` crea una clase llamada `Etapa` con los siguientes atributos:
 ```java
-package org.bedu.jse2.generics;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class LimitedConverterTest {
-
-    @Test
-    @DisplayName("Funciona con Enteros")
-    void integers(){
-        Integer numero1 = 3;
-        Integer numero2 = 4;
-
-        LimitedConverter<Integer> converter = new LimitedConverter<>();
-
-        assertFalse(converter.esMayorQue(numero1, numero2));
-    }
-    
-    @Test
-    @DisplayName("Funciona con Double")
-    void doubles(){
-        Double numero1 = 3.4;
-        Double numero2 = 4.7;
-
-        LimitedConverter<Double> converter = new LimitedConverter<>();
-
-        assertTrue(converter.esMayorQue(numero2, numero1));
-
-    }
+    private Long etapaId;
+    private String nombre;
+    private Integer orden;
+```
+7. Decora la clase con la anotación `@Data` de *Lombok*:
+```java
+@Data
+public class Etapa {
 
 }
 ```
-1. Crea la clase LimitedConverter de la siguiente manera
+
+8. Decora también la clase con las siguientes anotaciones de JPA:
 ```java
-package org.bedu.jse2.generics;
+@Entity
+@Table(name = "ETAPAS")
+public class Etapa {
 
-public class LimitedConverter <E extends Number>{
-
-   public boolean esMayorQue(E number1, E number2) {
-     return (number1.doubleValue() - number2.doubleValue()) > 0;
-   }
 }
 ```
 
-Al establecer el límite superior podemos usar métodos de ese tipo, en este caso .doubleValue.
+9. Decora los atributos con las siguientes de JPA:
+```java
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long etapaId;
+
+    @Column(nullable = false, length = 100)
+    private String nombre;
+
+    @Column(nullable = false, unique = true)
+    private Integer orden;
+```
+
+10. En el paquete `persistence` crea una **interface** llamada `EtapaRepository` que extienda de `JpaRepository`. Esta interface permanecerá sin métodos:
+```java
+public interface EtapaRepository extends JpaRepository<Etapa, Long> {
+
+}
+```
+
+11. Coloca el siguiente contenido en el archivo `application.properties` (los valores entre los signos `<` y `>` reemplazalos con tus propios valores):
+```
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.generate_statistics=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/bedu?serverTimezone=UTC
+spring.datasource.username=<usuario>
+spring.datasource.password=<password>
+```
+
+12. Agrega la dependencia de H2 en el archivo `pom.xml`:
+
+```xml
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+```
+
+13. Ejecuta la aplicación e ingresa a la siguiente dirección en tu navegador:
+
+http://localhost:8080/h2-console/
+
+debes ver una venta como la siguiente:
+
+![imagen](img/img_01.png)
+
+14. Cambia la información del *Driver Class*, *JDBC URL*, *User Name* y *Password* a los valores correspondientes a MySQL (los que tienes en el archivo `application.properties`.
+
+    - Driver Class: **org.hibernate.dialect.MySQL5Dialect**
+    - JDBC URL: **jdbc:mysql://localhost:3306/bedu?serverTimezone=UTC**
+
+15. Presiona el botón *Test Connection*, debe aparecer un mensaje indicando que la prueba es exitosa (y el password debe haber desaparecido).
+
+![imagen](img/img_02.png)
+
+
+16. Vuelve a colocar el password y presiona el botón *Connect* debes entrar a la consola de H2. Esta consla muestra muchas tablas. Las de tu aplicación serán las últimas:
+
+![imagen](img/img_03.png)
+
+17. Escribe una consulta en la consola; la información aparcera en el panel de respuestas.

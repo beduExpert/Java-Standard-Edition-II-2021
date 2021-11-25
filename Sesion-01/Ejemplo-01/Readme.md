@@ -1,57 +1,87 @@
-## Ejercicio 01
+## Ejemplo: Creación de proyecto Gradle con Spring Initializr
 
-**Prerequisitos**
+### Objetivo
+- Aprender la forma de crear un proyecto Gradle usando Spring Initializr.
+- Compilar, empaquetar y ejecutar la aplicación o proyecto generados desde la línea de comandos.
+- Ejecutar la aplicación desde la línea de comandos.
 
-* Tener instalado MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
-* Tener instalado Apache Maven
-* Tener instalado el JDK 12
+#### Requisitos
+1. Tener instalado la última versión del JDK 11 (De Oracle u OpenJDK).
 
-**Objetivo** 
+#### Desarrollo
 
-- Hacer uso del Spring Data para configurar la conexión a la base de datos
+1. Entra al sitio de [Spring Initializr](https://start.spring.io/). Ahí verás una sola página dividida en dos secciones. Comienza llenando la información de la sección del lado izquierdo. Selecciona:
+  - Gradle Proyect (no te preocupes, no es necesario que tengas Gradle instalado).
+  - Lenguaje: **Java**.
+  - Versión de Spring Boot, la versión estable más reciente (al momento de escribir esto la **2.3.5**)
+  - Grupo, artefacto y nombre del proyecto.
+  - Forma de empaquetar la aplicación: **jar**.
+  - Versión de Java: **11**.
 
-#### Preparativos
-1. Clona el proyecto del ejercicio - [Código](codigo)
+![imagen](img/img_01.png)
 
-2. En la ruta **src/main/resouces/sql** se encuentran los archivos de inicialización de la base de datos. Ejecuta desde una línea de comandos:
+2. En la sección de la derecha (las dependencias) presiona el botón `Add dependencies` y en la ventana que se abre busca la dependencia `Web` o `Spring Web`.
 
-```bash
-  mysql -u root -p < usuario_y_esquema.sql
-```
-Esto creará el esquema (vacío) **BEDU_JSE2** y un par de usuarios: **usuario** y **admin** con contraseñas _PASSWD_ y _ADMIN_PWD_ respectivamente.
+![imagen](img/img_05.png)
 
-3. Ejecuta la siguiente instrucción (Nota que esta vez se ejecuta con el usuario admin que acabamos de crear)
+3. Selecciona la dependencia `Spring Web` y con eso debes verla en la lista de las dependencias del proyecto:
 
-```bash
-  mysql -u admin -p < tablas.sql
-```
-Esto creará las tablas necesarias para el ejemplo.
+![imagen](img/img_06.png)
 
+4. Presiona el botón "GENERATE" (o presiona `Ctrl` + `Enter` en tu teclado) para que comience la descarga del proyecto.
 
-##### Sobre Sprig Boot 
+![imagen](img/img_03.png)
 
-El ejemplo está hecho con Spring Boot, una herramienta de Spring que permite ejecutar una aplicación web sin un servidor de aplicaciones externo. El funcionamiento a profundidad de Spring Boot queda fuera del alcance de este curso, pero se recomienda su estudio. 
+5. Descomprime el archivo `zip` descargado, el cual tiene más o menos el siguiente contenido.
 
-Se puede inicializar una aplicación de Spring Boot con Maven usando el siguiente comando
+![imagen](img/img_04.png)
 
-```bash
-    mvn spring-boot:run
-```
-    
-### Procedimiento
+6. Abre una terminal o línea de comandos en el directorio que acabas de descomprimir y ejecuta los siguientes comandos, los cuales se ejecutan en Gradle gracias a un *wrapper* que se distribuye dentro del paquete que acabas de descargar:
 
-1. Inicia la aplicación con Maven. Aparecerá un error ya que la conexión a la base de datos no ha sido configurada y por lo tanto no se puede inicializar el objeto **DataSource**
+        gradlew clean build
+      
+7. La salida del comando anterior debe ser parecida a la siguiente:
 
-   ![Error DB](img/figura01.png)
+![imagen](img/img_07.png)
 
-2. Abre el archivo **src/main/resources/application.properties**. Ahí escribe los valores para la conexión a la base de datos:
+8. Una vez que todo está compilado, usa el siguiente comando para ejecutar la aplicación. 
 
-		spring.datasource.url=jdbc:mysql://localhost/BEDU_JSE2
-		spring.datasource.username=usuario
-		spring.datasource.password=PASSWD
+        gradlew bootRun
+        
+9. Debes obtener una salida similar a la siguiente:
 
-   ![Configuración DB](img/figura02.png)
+![imagen](img/img_08.png)
 
-3. Vuelve a ejecutar la aplicación con maven. Esta vez no debe haber ningún error.
+Esto indica que la aplicación se levantó correctamente en el puerto **8080**. Como no hemos colocado ningún contenido en la aplicación no hay mucho que mostrar, pero podremos comprobar que la aplicación está bien configurada, que todos los elementos necesarios están instalados y configurados y que nuestra aplicación se ejecuta de forma correcta:
 
-   ![Conexión DB](img/figura03.png)
+      http://localhost:8080
+      
+Una vez que el sitio cargue, debes ver una pantalla como la siguiente:
+
+![imagen](img/img_09.png)
+
+10. Detén la aplicación presionando `Ctrl + C` en la terminal en donde levantaste la aplicación.
+
+Puesto que la aplicación está completamente contenida en un archivo `jar`, también es posible ejecutarla de otra forma.
+
+11. Al compilar la aplicación con `gradlew build` se creó un directorio `build` y dentro de este un directorio `libs`. Navega a este directorio, el cual debe contener solamente un archivo `jar`.
+
+![imagen](img/img_10.png)
+
+12. Abre una terminal en este directorio y ejecuta el siguiente comando (cambia el nombre del jar si en tu caso es diferente):
+
+        java -jar backend.sesion1-0.0.1-SNAPSHOT.jar
+        
+13. Con esto nuevamente debes obtener una salida como la siguiente:
+
+![imagen](img/img_11.png)
+
+Nuevamente, esto indica que la aplicación se levantó correctamente en el puerto **8080**. Como no hemos colocado ningún contenido en la aplicación no hay mucho que mostrar, pero podremos comprobar que la aplicación está bien configurada, que todos los elementos necesarios están instalados y configurados y que nuestra aplicación se ejecuta de forma correcta:
+
+      http://localhost:8080
+      
+Una vez que el sitio cargue, debes ver una pantalla como la siguiente:
+
+![imagen](img/img_09.png)
+
+13. ¡¡Felicidades, acabas de ejecutar tu primer "Hola mundo" con Spring Boot!!

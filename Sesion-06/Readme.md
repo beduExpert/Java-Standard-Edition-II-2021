@@ -1,25 +1,21 @@
 
-## Sesión 06: Clases genéricas
+# Sesión 6: Spring Data JPA
 
-### OBJETIVOS 
+## Objetivos
+- Entender qué es una entidad y cómo declararla
+- Aprender qué es un repositorio de Spring Data y la forma de declararlos
+- Usar la consola de H2 para visualizar la información de la base de datos
 
-- Entender la necesidad de Generics
-- Conocer el uso de Generics
-- Entender el proceso de *Type Erasure* que hace el compilador
+## Organización de la clase
 
+- Persistencia con Spring Boot y Spring Data JPA
+  - [Ejemplo 1](Ejemplo-01)
+  - [Reto 1](Reto-01)
 
-#### ORGANIZACION DE LA CLASE 
+- Inicialización de datos
+  - [Ejemplo 2](Ejemplo-02)
+  - [Reto 2](Reto-02)
 
-- Clases genéricas
-
-	- [Ejemplo 01](Ejemplo-01)
-	- [Reto 01](Reto-01)
-	
- - Métodos Genéricos	
-	- [Ejemplo 02](Ejemplo-02)
-	- [Reto 02](Reto-02)
-	
- - Límites superiores e inferiores	
-	- [Ejemplo 03](Ejemplo-03)
-	- [Reto 03](Reto-03)
-
+- Consola de H2
+  - [Ejemplo 3](Ejemplo-03)
+ 

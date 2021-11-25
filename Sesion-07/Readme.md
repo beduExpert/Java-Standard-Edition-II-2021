@@ -1,23 +1,19 @@
 
-## Sesión 07: Microservicios
+# Sesión 7: Pruebas unitarias con Spring Boot y Junit 5
 
-### OBJETIVOS 
+## Objetivos
+- Tener un entendimiento básico de qué es una prueba unitaria
+- Aplicar pruebas unitarias en Spring Boot usando los objetos proporcionados por Spring Test
 
- - Conocer el concepto de microservicios.
- - Conocer la motivación de los microservicios.
- - Tamaño de un microservicio.
- - Frameworks para crear microservicios.
- - Comunicación de los microservicios
- - Reactive en microservicios
+## Organización de la clase
 
-#### ORGANIZACION DE LA CLASE 
+- Pruebas unitarias con JUnit 5 y Mockito
+  - [Ejemplo 1](Ejemplo-01)
+  - [Reto 1](Reto-01)
 
-- Tema que veran en el ejemplo
+- Pruebas unitarias de controladores con MockMvc
+  - [Ejemplo 2](Ejemplo-02)
+  - [Reto 2](Reto-02)
 
-	- [Ejemplo 01](Ejemplo-01)
-	- [Reto 01](Reto-01)
-	- [Ejemplo 02](Ejemplo-02)
-	- [Reto 02](Reto-02)
-	- [Ejemplo 03](Ejemplo-03)
-	- [Reto 03](Reto-03)
-
+-  Pruebas integrales con TestRestTemplate
+    - [Ejemplo 3](Ejemplo-03)

@@ -1,103 +1,265 @@
-## Ejemplo 02: Refactorización de código
+## Ejemplo 2: Generación de documentación de respuestas y personalización de documentación
 
-### Objetivos
-* Aplicar los principios de buenas prácticas para elevar la mantenibilidad y legibilidad del código
+### Objetivo
 
-### Procedimiento
+- Documentar la respuesta obtenida de la ejecución de un método de prueba.
+- Personalizar la página generada, con más información y una tabla de contenido.
 
-#### Análisis
 
-Clona el proyecto donde encontrarás una clase llamada ClaseEspaguetti.
+#### Requisitos
+- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
+- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
 
-Analiza el código para identificar todo lo que está haciendo.
-    * Por medio de las anotaciones _@RequestMapping_ está enlazando peticiones HTTP al sistema.
-    * En el caso del método _guardarCita_ está aplicando reglas de negocio (validar que la cita no se haya guardado previamente).
-    * Usamos la clase _CitaRepository_ para interactuar con la base de datos.
 
-El Principio de Responsabilidad Única tiene una variación, _Un componente [clase] debe tener una y sólo una razón de cambiar_.
+#### Desarrollo
 
-  Aplicando este concepto podemos identificar al menos dos causas que requerirían modificación de nuestra clase: Si cambia la lógica de negocio o si cambia la forma de enlazar las peticiones HTTP al sistema. por lo que se recomienda hacer una refactorización.
+1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
 
-#### Refactorización
+2. En la ventana que se abre selecciona las siguientes opciones:
+- Grupo, artefacto y nombre del proyecto.
+- Tipo de proyecto: **Maven Project**.
+- Lenguaje: **Java**.
+- Forma de empaquetar la aplicación: **jar**.
+- Versión de Java: **11**.
 
-1. Crea paquetes para el controlador, las reglas de negocio, el modelo y el repositorio. Esta separación nos ayuda a tener un control en proyectos más grandes.
-1. Mueve la clase _Cita_ al paquete modelo.
-1. Mueve el archivo _CitaRepository_ al nuevo paquete repositorio.
-1. Crea la interfaz _CitaService_ en el paquete negocio y define los dos métodos que tenemos (guardar y buscarPorId).
-1. Crea la clase _CitaServiceImpl_ en el paquete negocio e implementa los métodos.
-1. Modifica la clase _ClaseEspaguetti_ para que use _CitaService_ para invocar los servicios.
-1. Mueve la clase _ClaseEspaguetti_ al paquete controlador y cambia su nombre a _CitaController_ (después de todo ya no es un nombre adecuado).
+3. En la siguiente ventana elige **Spring Web**, **Spring Rest Docs**, y **Lombok** como dependencias del proyecto. En automático se agregarán también las dependencias para realizar pruebas unitarias.
 
-#### Resultado final
+4. Dale un nombre y una ubicación al proyecto y presiona el botón *Finish*.
 
-Luego de aplicar los pasos anteriores separamos el archivo ClaseEspaguetti en dos archivos, uno con cada una de las responsabilidades (casusas de cambio). 
+5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion8.ejemplo2`. Dentro crea los subpaquetes: `controllers` y `model`.
 
-Además, creamos una interfaz y una implementación en el servicio para abrir la posibilidad de cambiar fácilmente la implementación a futuro. Esto parece una exageración en un ejemplo de este tamaño, pero para sistemas más grandes siempre se recomienda.
-
-Gracias a los paquetes, cuando busquemos hacer un cambio, podremos encontrar de manera más sencilla el archivo de interés.
-
+6. Dentro del paquete `model` crea una clase llamada `Cliente` de la siguiente forma:
 ```java
-package com.example.demo.controlador;
+@Data
+@Builder
+public class Cliente {
+    private Long id;
+    private String nombre;
+    private String correoContacto;
+    private int numeroEmpleados;
+    private String direccion;
+}
 
-import com.example.demo.modelo.Cita;
-import com.example.demo.negocio.CitaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+```
 
+7. En el paquete `controllers` crea una clase llamada `ClienteController` que represente un servicio REST de Spring:
+```java
 @RestController
-@RequestMapping("/cita")
-public class CitaController {
+@RequestMapping("/cliente")
+public class ClienteController {
 
-    private final CitaService service;
-
-    @Autowired
-    public CitaController(CitaService repository) {
-        this.service = repository;
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public void guardarCita(Cita cita){
-        service.guardarCita(cita);
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    public Cita buscarCita(Long id){
-       return service.buscarCita(id);
-    }
 }
 ```
+
+8. Coloca un método dentro de esta clase que regresará un `Cliente`.
 ```java
-package com.example.demo.negocio;
-
-import com.example.demo.modelo.Cita;
-import com.example.demo.repositorio.CitaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-@Service
-public class CitaServiceImpl implements CitaService{
-    private final CitaRepository repository;
-
-    @Autowired
-    public CitaServiceImpl(CitaRepository repository) {
-        this.repository = repository;
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<Cliente> getCliente(@PathVariable Long clienteId){
+        return ResponseEntity.ok(Cliente.builder().id(1L).correoContacto("cliente@contacto.com").nombre("Nombre").build());
     }
+```
 
-    @Override
-    public void guardarCita(Cita cita) {
+9. En el directorio de pruebas de Maven agrega una nueva clase llamada `ClienteControllerTest`. Decora la nueva clase con las anotaciones `@AutoConfigureRestDocs` y `@WebMvcTest(ClienteController.class)`. 
+```java
+@AutoConfigureRestDocs
+@WebMvcTest(ClienteController.class)
+class ClienteControllerTest {
 
-        if(repository.findAllByContenido(cita.getContenido()).size() > 0){
-            throw new RuntimeException("La cita ya fue registrada");
-        }
-
-        repository.save(cita);
-    }
-
-    @Override
-    public Cita buscarCita(Long id) {
-        return repository.findById(id).get();
-    }
 }
 ```
+
+10. Agrega una instancia de tipo `MockMvc` y decórala con la anotación `@Autowired`:
+
+```java
+    @Autowired
+    private MockMvc mockMvc;
+```
+
+11. Crea un método llamado `obtenClienteTest` para verificar la obtención del cliente:
+```java
+    @Test
+    void obtenClienteTest() throws Exception {
+
+        mockMvc.perform(get("/cliente/{clienteId}", 1)
+                .content(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.correoContacto", is("cliente@contacto.com")))
+                .andExpect(jsonPath("$.nombre", is("Nombre")));
+
+    }
+```
+12. Ejecuta la prueba, esta debe pasar de forma correcta:
+
+![imagen](img/img_02.png)
+
+13. Indica en la prueba que esta debe generar documentación, y que la misma se debe colocar en el directrio `cliente/get-cliente`. Se documentarán los parámetros de la petición (en este caso el parámetro `clienteId`).
+```java
+    @Test
+    void obtenClienteTest() throws Exception {
+
+        mockMvc.perform(get("/cliente/{clienteId}", 1)
+                .content(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.correoContacto", is("cliente@contacto.com")))
+                .andExpect(jsonPath("$.nombre", is("Nombre")))
+
+               .andDo(document("cliente/get-cliente",
+                        pathParameters(
+                                parameterWithName("clienteId").description("Identificador del cliente")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("identificador del cliente"),
+                                fieldWithPath("nombre").description("nombre del cliente"),
+                                fieldWithPath("correoContacto").description("correo de contacto del cliente"),
+                                fieldWithPath("numeroEmpleados").description("número de trabajadores del cliente"),
+                                fieldWithPath("direccion").description("domicilio del cliente")
+                        )));
+
+    }
+```
+
+14. Ejecuta la prueba haciendo nuevamente. En el directorio `target` se ha creado un subdirectorio `generated-snippets` y adentro de este un conjunto de archivos `.adoc`, Estos contienen la información generada de la ejecución de la prueba.
+
+![imagen](img/img_03.png)
+
+
+15. Dentro del directorio de código fuente de la aplicación crea un subdirectorio `docs` y dentro otro subdirectorio `asciidocs`. Adentro de este crea un archivo llamado `index.adoc`:
+
+16. Coloca el siguiente contenido dentro del archivo:
+```adoc
+= Curso de Java Backend en Bedu
+Bedu ORG <contacto@bedu.org> 1.0.0;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:sectnums:
+
+[[resumen]]
+= Resumen
+Este curso muestra el desarrollo de un API usando Spring Framework, con sus módulos Spring Boot, Spring Data JPA y Spring REST Docs.
+
+
+[[verbos-http]]
+== Verbos HTTP
+
+Este curso trate de adherirse lo más posible al estándar RESTful aprovechando las capacidades del protocolo de HTTP
+y siguiendo las convenciones HTTP en su uso de los verbos HTTP.
+
+|===
+| Verbo | Uso
+
+| `GET`
+| Recuperar un recurso
+
+| `POST`
+| Crea un nuevo recurso
+
+| `PUT`
+| Actualizar un recurso existente, incluyendo actualizaciones parciales
+
+| `DELETE`
+| Eliminar un recurso existente
+|===
+
+Este curso trate de adherirse lo más posible al estándar RESTful en el uso de los códigos de estátus HTTP.
+
+|===
+| Code | uso
+
+| `200 OK`
+| La petición se completó exitosamente
+
+| `201 Created`
+| Se creó un nuevo recurso. La URL del reurso está disponible en la cabecera `Location` de la respuesta
+
+| `204 No Content`
+| Se aplicó correctamente la actualización de un recurso
+
+| `400 Bad Request`
+| La petición está formada de forma incorrecta. El cuerpo de la respuesta incluirá el error, proporcionando más información
+
+| `404 Not Found`
+| El recurso especificado no existe
+|===
+
+
+[[clientes]]
+== Clientes
+
+=== Get cliente por Id
+Obtiene un cliente específico usando su identificador único.
+
+==== Ejemplo de petición
+include::{snippets}/cliente/get-cliente/http-request.adoc[]
+
+==== Ejemplo de respuesta
+include::{snippets}/cliente/get-cliente/http-response.adoc[]
+
+==== Ejemplo usando CURL
+include::{snippets}/cliente/get-cliente/curl-request.adoc[]
+
+==== Parámetros de la petición
+include::{snippets}/cliente/get-cliente/path-parameters.adoc[]
+
+
+```
+
+17. En el archivo `pom.xml` del proyecto busca, en la sección de plugins, el plugin `asciidoctor-maven-plugin` y colola las siguientes elementos dentro de la etiqueta `<configuration>`:
+
+```xml
+    <sourceDocumentName>index.adoc</sourceDocumentName>
+    <attributes>
+        <snippets>${project.build.directory}/generated-snippets</snippets>
+    </attributes>
+    <sourceDirectory>src/docs/asciidocs</sourceDirectory>
+    <outputDirectory>target/generated-docs</outputDirectory>
+```
+
+El plugin debe uedar de la siguiente forma:
+```xml
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.8</version>
+                <executions>
+                    <execution>
+                        <id>generate-docs</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html</backend>
+                            <sourceDocumentName>index.adoc</sourceDocumentName>
+                            <attributes>
+                                <snippets>${project.build.directory}/generated-snippets</snippets>
+                            </attributes>
+                            <sourceDirectory>src/docs/asciidocs</sourceDirectory>
+                            <outputDirectory>target/generated-docs</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.restdocs</groupId>
+                        <artifactId>spring-restdocs-asciidoctor</artifactId>
+                        <version>${spring-restdocs.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+```
+
+19. Ejecuta nuevamente la prueba. Dentro del directorio `target` debe haberse creado un subdirectorio `generated-docs` y dentro de este un archivo llamado `index.html`.
+
+![imagen](img/img_06.png)
+
+20. Abre este archivo en un navegador. La página con la documentación debe verse de la siguiente forma:
+
+![imagen](img/img_07.png)

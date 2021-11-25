@@ -1,25 +1,28 @@
-## Postwork 06
+## Postwork Sesión 6
 
-A lo largo de este proyecto reafirmaremos lo que se ha aprendido durante las sesiones.
+### Objetivo
+- Entender qué es una entidad y cómo declararla usando las anotaciones de JPA dentro de nuestro proyecto.
+- Aprender qué es un repositorio de Spring Data, la forma de declararlos y de usarlos para las operaciones relacionadas con el manejo de las bases de datos.
+- Usar la consola de H2 para visualizar la información de la base de datos embebida dentro de nuestra aplicación.
 
-### Módulo 6 - Generics
 
-Uno de los principales uso de Generics es poder implementar algoritmos independientes de sus parámetros.
+#### Desarrollo   
+1. Agrega el driver de MySQL como dependencia del proyecto.
 
-Crea una implementación del algoritmo [Merge Sort](https://www.tutorialspoint.com/data_structures_algorithms/merge_sort_algorithm.htm) que cumpla con la siguiente interfaz:
+2. Agrega las propiedades para realizar la conexión a la base de datos en el archivo `application.properties` del proyecto. 
 
-Intenta que tu archivo tenga 50 líneas de código o menos (imports incluídos).
+3. Añade un nuevo paquete llamado entities, dentro del paquete persistence.
 
-```java
-public class MergeSortAlgorithm {
-    public static <T extends Comparable<T>> List<T> sort(List<T> unsortedList) {
-        //Tu código aquí
-        return null;
-    }
+4. Crea una copia de los objetos contenidos en el paquete model pero coloca las anotaciones de JPA en lugar de las validaciones.
 
-    public static <T> List<T> sort(List<T> unsortedList, Comparator<T> comparator) {
-        //Tu código aquí
-        return null;
-    }
-}
-```
+5. Crea un repositorio para cada una de las entidades (recuerda que debe ser una interface que extienda de `JpaRepository`).
+
+6. Agrega la dependencia de H2 a la aplicación y asegúrate de que puedes conectarte a esta.
+
+![imagen](img/img_01.png)
+
+7. Agrega una clase que implemente la interface `CommandLineRunner` de Spring para inicializar los catálogos de la aplicación.
+
+![imagen](img/img_02.png)
+
+![imagen](img/img_03.png)

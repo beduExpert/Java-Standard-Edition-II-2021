@@ -1,18 +1,21 @@
+# Sesión 5: Project Lombok y MapStruct
 
-## Sesión 05: Streams Reactivos
+## Objetivos
+- Aprender a usar Lombok como herramienta que genera código común (bolerplate) en objetos Java.
+- Aprender a usar MapStruct para mapear los atributos de un objeto con los de un objeto diferente.
+- Exponer los objetos creados con MapStruct como componentes de Spring.
 
-### OBJETIVOS 
- - Conocer la motivación de la Programación Reactiva.
- - Conocer las opciones existentes para programación reactiva en java.
+## Organización de la clase
+- Introducción a Lombok
+  - [Ejemplo 1](Ejemplo-01)
+  - [Reto 1](Reto-01)
 
-#### ORGANIZACION DE LA CLASE 
+- Introducción a MapStruct
+  - [Ejemplo 2](Ejemplo-02)
+  - [Reto 2](Reto-02)
 
-- Tema que veran en el ejemplo
+- Uso de Lombok y MapStruct con Spring Boot
+  - [Ejemplo 3](Ejemplo-03)
+ 
 
-	- [Ejemplo 01](Ejemplo-01)
-	- [Reto 01](Reto-01)
-	- [Ejemplo 02](Ejemplo-02)
-	- [Reto 02](Reto-02)
-	- [Ejemplo 03](Ejemplo-03)
-	- [Reto 03](Reto-03)
 

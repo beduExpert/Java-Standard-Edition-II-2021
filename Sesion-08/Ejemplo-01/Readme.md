@@ -1,114 +1,198 @@
-## Ejemplo 01: Refactorizacón de código
+## Ejemplo 1: Generación de documentación de métodos GET
 
-### Objetivos
-* Aplicar los principios de buenas prácticas para elevar la mantenibilidad y legibilidad del código
+### Objetivo
 
-### Procedimiento
+- Crear una prueba que ayude a validar el correcto funcionamiento de una clase o componente.
+- Generar, con la misma prueba, la documentación de la invocación del método **GET**, incluyendo los parámetros de petición y la respuesta obtenida.
 
-#### Análisis
 
-Clona el proyecto (link pendiente) donde encontrarás una clase llamada TodaLogica.
+#### Requisitos
+- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
+- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
 
-Analiza el código para identificar todo lo que está haciendo.
-    * Por medio de las anotaciones _@RequestMapping_ está enlazando peticiones HTTP al sistema.
-    * En el caso del método _guardarCasa_ está aplicando reglas de negocio (validar la existencia de un jefe de familia
-      y pasar todos los valores a mayúsculas.
-    * Usamos la clase _CasaRepository_ para interactuar con la base de datos.
 
-El Principio de Responsabilidad Única tiene una variación, _Un componente [clase] debe tener una y sólo una razón de cambiar_.
+#### Desarrollo
 
-  Aplicando este concepto podemos identificar al menos dos causas que requerirían modificación de nuestra clase: Si cambia la lógica de negocio o si cambia la forma de enlazar las peticiones HTTP al sistema. por lo que se recomienda hacer una refactorización.
+1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
 
-#### Refactorización
+2. En la ventana que se abre selecciona las siguientes opciones:
+- Grupo, artefacto y nombre del proyecto.
+- Tipo de proyecto: **Maven Project**.
+- Lenguaje: **Java**.
+- Forma de empaquetar la aplicación: **jar**.
+- Versión de Java: **11**.
 
-1. Crea paquetes para el controlador, las reglas de negocio, el modelo y el repositorio. Esta separación nos ayuda a tener un control en proyectos más grandes.
-1. Mueve la clase _Casa_ al paquete modelo.
-1. Mueve el archivo _CasaRepository_ al nuevo paquete repositorio.
-1. Crea la interfaz _CasaService_ en el paquete negocio y define los dos métodos que tenemos (guardar y buscarPorId).
-1. Crea la clase _CasaServiceImpl_ en el paquete negocio e implementa los métodos.
-1. Modifica la clase _TodaLogica_ para que use _CasaService_ para invocar los servicios.
-1. Mueve la clase _TodaLogica_ al paquete controlador y cambia su nombre a _CasaController_ (después de todo ya no contiene toda la lógica y ya no es un nombre adecuado).
-1. Como punto final, recordemos que nuestro código debe ser lo más sencillo (KISS). El método _getCasa_ recibe el valor id como String y luego debemos convertirlo a Long. Pero podemos recibirlo diréctamente como Long, dejando la conversión al framework.
+3. En la siguiente ventana elige **Spring Web**, **Spring Rest Docs**, y **Lombok** como dependencias del proyecto. En automático se agregarán también las dependencias para realizar pruebas unitarias.
 
-#### Resultado final
+![imagen](img/img_01.png)
 
-Luego de aplicar los pasos anteriores separamos el archivo TodaLogica en dos archivos, uno con cada una de las responsabilidades (casusas de cambio). 
+4. Dale un nombre y una ubicación al proyecto y presiona el botón *Finish*.
 
-Además, creamos una interfaz y una implementación en el servicio para abrir la posibilidad de cambiar fácilmente la implementación a futuro. Esto parece una exageración en un ejemplo de este tamaño, pero para sistemas más grandes siempre se recomienda.
+5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion8.ejemplo1`. Dentro crea los subpaquetes: `controllers` y `model`.
 
-Gracias a los paquetes, cuando busquemos hacer un cambio, podremos encontrar de manera más sencilla el archivo de interés.
-
+6. Dentro del paquete `model` crea una clase llamada `Cliente` de la siguiente forma:
 ```java
-package com.example.demo.controlador;
+@Data
+@Builder
+public class Cliente {
+    private Long id;
+    private String nombre;
+    private String correoContacto;
+    private int numeroEmpleados;
+    private String direccion;
+}
 
-import com.example.demo.modelo.Casa;
-import com.example.demo.negocio.CasaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+```
 
+7. En el paquete `controllers` crea una clase llamada `ClienteController` que represente un servicio REST de Spring:
+```java
 @RestController
-@RequestMapping("/casa")
-public class CasaController {
+@RequestMapping("/cliente")
+public class ClienteController {
 
-    private final CasaService service;
-
-    @Autowired
-    public CasaController(CasaService service) {
-        this.service = service;
-    }
-
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public void guardarCasa(@RequestBody Casa casa) {
-        service.guardar(casa);
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Casa getCasa(@PathVariable Long id) {
-        return service.buscarPorId(id);
-    }
 }
 ```
+
+8. Coloca un método dentro de esta clase que regresará un `Cliente`.
 ```java
-package com.example.demo.negocio;
-
-import com.example.demo.modelo.Casa;
-import com.example.demo.repositorio.CasaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-
-@Service
-public class CasaServiceImpl implements CasaService {
-
-    private CasaRepository repository;
-
-    @Autowired
-    public CasaServiceImpl(CasaRepository repository) {
-        this.repository = repository;
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<Cliente> getCliente(@PathVariable Long clienteId){
+        return ResponseEntity.ok(Cliente.builder().id(1L).correoContacto("cliente@contacto.com").nombre("Nombre").build());
     }
+```
 
-    @Override
-    public void guardar(Casa casa) {
-        if (casa.getJefeDeFamilia() == null)
-            throw new RuntimeException("Se debe tener un padre de familia");
+9. En el directorio de pruebas de Maven agrega una nueva clase llamada `ClienteControllerTest`. Decora la nueva clase con las anotaciones `@AutoConfigureRestDocs` y `@WebMvcTest(ClienteController.class)`. 
+```java
+@AutoConfigureRestDocs
+@WebMvcTest(ClienteController.class)
+class ClienteControllerTest {
 
-        casa.setJefeDeFamilia(casa.getJefeDeFamilia().toUpperCase());
-
-        ArrayList<String> otrosMayusculas = new ArrayList<>();
-
-        for (String nombre : casa.getOtros()) {
-            otrosMayusculas.add(nombre.toUpperCase());
-        }
-
-        casa.setOtros(otrosMayusculas);
-
-        repository.save(casa);
-    }
-
-    @Override
-    public Casa buscarPorId(Long id) {
-        return repository.findById(id).get();
-    }
 }
 ```
+
+10. Agrega una instancia de tipo `MockMvc` y decórala con la anotación `@Autowired`:
+
+```java
+    @Autowired
+    private MockMvc mockMvc;
+```
+
+11. Crea un método llamado `obtenClienteTest` para verificar la obtención del cliente:
+```java
+    @Test
+    void obtenClienteTest() throws Exception {
+
+        mockMvc.perform(get("/cliente/{clienteId}", 1)
+                .content(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.correoContacto", is("cliente@contacto.com")))
+                .andExpect(jsonPath("$.nombre", is("Nombre")));
+
+    }
+```
+12. Ejecuta la prueba, esta debe pasar de forma correcta:
+
+![imagen](img/img_02.png)
+
+13. Indica en la prueba que esta debe generar documentación, y que la misma se debe colocar en el directrio `cliente/get-cliente`. Se documentarán los parámetros de la petición (en este caso el parámetro `clienteId`).
+```java
+    @Test
+    void obtenClienteTest() throws Exception {
+
+        mockMvc.perform(get("/cliente/{clienteId}", 1)
+                .content(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.correoContacto", is("cliente@contacto.com")))
+                .andExpect(jsonPath("$.nombre", is("Nombre")))
+
+                .andDo(document("cliente/get-cliente",
+                        pathParameters(
+                                parameterWithName("clienteId").description("Identificador del cliente")
+                        )));
+
+    }
+```
+
+14. Ejecuta la prueba haciendo nuevamente. En el directorio `target` se ha creado un subdirectorio `generated-snippets` y adentro de este un conjunto de archivos `.adoc`, Estos contienen la información generada de la ejecución de la prueba.
+
+![imagen](img/img_03.png)
+
+
+15. Abre el contenido de cualquiera de los archivos. Debes ver la nformación en texto plano, de la siguiente forma:
+
+![imagen](img/img_04.png)
+
+16. Dentro del directorio de código fuente de la aplicación crea un subdirectorio `docs` y dentro otro subdirectorio `asciidocs`. Adentro de este crea un archivo llamado `get-cliente.adoc`:
+
+![imagen](img/img_05.png)
+
+17. Coloca el siguiente contenido dentro del archivo:
+```adoc
+[[clientes]]
+== Clientes
+
+=== Get cliente por Id
+Obtiene un cliente específico usando su identificador único.
+
+==== Ejemplo de petición
+include::{snippets}/cliente/get-cliente/http-request.adoc[]
+
+==== Parámetros de la petición
+include::{snippets}/cliente/get-cliente/path-parameters.adoc[]
+
+==== Ejemplo de respuesta
+include::{snippets}/cliente/get-cliente/http-response.adoc[]
+
+==== Ejemplo usando CURL
+include::{snippets}/cliente/get-cliente/curl-request.adoc[]
+
+```
+
+18. En el archivo `pom.xml` del proyecto busca, en la sección de plugins, el plugin `asciidoctor-maven-plugin` y colola las siguientes elementos dentro de la etiqueta `<configuration>`:
+
+```xml
+    <sourceDirectory>src/docs/asciidocs</sourceDirectory>
+    <outputDirectory>target/generated-docs</outputDirectory>
+```
+
+El plugin debe uedar de la siguiente forma:
+```xml
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.8</version>
+                <executions>
+                    <execution>
+                        <id>generate-docs</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html</backend>
+                            <sourceDirectory>src/docs/asciidocs</sourceDirectory>
+                            <outputDirectory>target/generated-docs</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.restdocs</groupId>
+                        <artifactId>spring-restdocs-asciidoctor</artifactId>
+                        <version>${spring-restdocs.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+```
+
+19. Ejecuta nuevamente la prueba. Dentro del directorio `target` debe haberse creado un subdirectorio `generated-docs` y dentro de este un archivo llamado `get-cliente.html`.
+
+![imagen](img/img_06.png)
+
+20. Abre este archivo en un navegador. La página con la documentación debe verse de la siguiente forma:
+
+![imagen](img/img_07.png)

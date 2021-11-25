@@ -1,129 +1,152 @@
-## Ejemplo 01: Definiendo una interfaz funcional
+## Ejemplo: Validaciones de Java Beans
 
-### OBJETIVO
- - Conocer los elementos básicos de las interfaces funcionales en Java
- - Crear tu primera inerface funcional
+### Objetivo
+- Aplicar las anotaciones proporcionadas por el JSR 303 para restringir los valores correctos de los atributos de los objetos del modelo de datos.
+- Usar Hibernate Validator como implementación del JSR 303.
 
-### REQUISITOS
+#### Requisitos
+- Tener instalado el IDE IntelliJ Idea Community Edition.
+- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
+- Tener instalada la herramienta Postman.
 
-* Maven
-* JDK 11
+#### Desarrollo
 
-### Maven
+1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
 
-Para ejecutar las pruebas de maven usa:
-```bash
-    mvn test
-```
+2. En la ventana que se abre selecciona las siguientes opciones:
+- Grupo, artefacto y nombre del proyecto. 
+- Tipo de proyecto: **Maven Project**. 
+- Lenguaje: **Java**. 
+- Forma de empaquetar la aplicación: **jar**. 
+- Versión de Java: **11**.
 
-### Procedimiento
+3. En la siguiente ventana elige Spring Web y **Validation** como dependencias del proyecto:
 
-#### Definiendo la interfaz
-1. Descarga el código del módulo ![Código](codigo)
+![imagen](img/img_01.png)
 
-2. En el paquete `org.bedu.jse2.demo.ejemplos` crea la interfaz `StringToInteger`
+4. Dale un nombre y una ubicación al proyecto y presiona el botón Finish.
 
-3. Anota la interfaz con ***@FunctionalInterface***
+En el proyecto que se acaba de crear debes tener el siguiente paquete: `org.bedu.java.backend.sesion3.ejemplo1`. Dentro crea dos subpaquetes: `model` y `controllers`.
 
-4. Define el método abstracto
+![imagen](img/img_02.png)
 
-```java
-   Integer convertir(String str);
-```
-
-
-#### Clase contenedora
-
-1. Crea la clase Ejemplo1 en el paquete `org.bedu.jse2.demo.ejemplos`.
-
-2. Agrega el siguiente bloque de código: 
+5. Dentro del paquete crea una nueva clase llamada "Cliente" con los siguientes atributos:
 
 ```java
-Integer sumar(String a, String b){
-  return null;
+private long id;
+private String nombre;
+private String correoContacto;
+private String numeroEmpleados;
+private String direccion;
+```
+
+Agrega también los *getter*s y *setter*s de cada atributo.
+
+6. En el paquete `controllers` agrega una clase llamada `ClienteController` y decórala con la anotación `@RestController`, de la siguiente forma:
+
+```java
+@RestController
+public class ClienteController {
 }
 ```
 
-#### Prueba unitaria
+Agrega un nuevo manejador de peticiones tipo `POST` el cual reciba como parámetro un objeto de tipo `Cliente` y regrese un objeto de tipo `ResponseEntity`, de la siguiente forma:
 
-1. Crea una prueba para la clase Ejemplo1
-  ![Crear prueba](img/figura01.png)
-
-2. Agrega el siguiente código:
-```java
-@Test
-@DisplayName("Suma dos strings convertidos a enteros")
-void addsUpTwoIntegers(){
-    String a = "4";
-    String b = "8";
-    Integer expected = 12;
-
-    Ejemplo1 ejemplo1 = new Ejemplo1();
-
-    assertEquals(expected, ejemplo1.sumar(a,b));
-}
 ```
-
-Si ejecutas la prueba en este momento obtendrás un error ya que estamos regresando `null`.
-
-
-#### Implementando la interfaz (clase anónima)
-
-1. Reemplaza el código de la clase de la siguiente manera:
-```java
-public class Ejemplo1 {
-
-   private final StringToInteger parser = new StringToInteger() {
-       @Override
-       public Integer convertir(String str) {
-           return Integer.parseInt(str);
-       }
-   };
-
-    Integer sumar(String a, String b) {
-
-        return parser.convertir(a) + parser.convertir(b);
+    @PostMapping("/cliente")
+    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
+        System.out.println(cliente.getNombre());
+        return ResponseEntity.created(URI.create("1")).build();
     }
+```
+
+7. Desde Postman envía una petición JSON con la siguiente información:
+
+```json
+{
+    "nombre": "Bedu",
+    "correoContacto": "contacto",
+    "numeroEmpleados": "20"
 }
 ```
 
-2. Vuelve a ejecutar la prueba
-
-En este primer ejemplo estamos usando un método tradicional implementando una clase anónima.
+![imagen](img/img_03.png)
 
 
-#### Implementando la interfaz (lambda)
+8. Envía la petición, con lo que debes obtener un resultado como el mostrado a continuación, en el que no hay un cuerpo en la respuesta y se tiene un código `201 Created`
 
-1. Reemplaza el código de la clase de la siguiente maner
+![imagen](img/img_04.png)
+
+Como puedes ver, a pesar de que estamos enviando información incompleta (no hemos proporcionado una dirección) y con formatos incorrectos (como en el caso del correo de contacto) la petición se recibe y se procesa de forma exitosa. En los siguientes pasos procesarás la información para evitar que esto pase.
+
+9. Agrega las siguientes validaciones en los atributos de la clase. Con esto estamos restringiendo los valores que puede tener cada uno de estos.
+
 ```java
-public class Ejemplo1 {
+    @PositiveOrZero(message = "El identificador no puede ser un número negativo")
+    private long id;
 
-   private final StringToInteger parser = s -> Integer.parseInt(s);
+    @NotEmpty(message = "El nombre del cliente no puede estar vacío")
+    @Size(min = 5, max = 30, message = "El nombre del cliente debe tener al menos 5 letras y ser menor a 30")
+    private String nombre;
 
-    Integer sumar(String a, String b) {
+    @Email
+    private String correoContacto;
 
-        return parser.convertir(a) + parser.convertir(b);
-    }
-}
+    @Min(value = 10, message = "Los clientes con menos de 10 empleados no son válidos")
+    @Max(value = 10000, message = "Los clientes con más de 10000 empleados no son válidos")
+    private String numeroEmpleados;
+
+    @NotBlank(message = "Se debe proporcionar una dirección")
+    private String direccion;
 ```
-2. Vuelve a ejecutar la prueba
 
-Esta vez hemos usado una lambda para proveer la implementación de la interfaz. El código es mucho más legible
+10. En la clase `ClienteController` agrega la siguiente anotación, con la cual se le indica a Spring que debe aplicar las validaciones indicadas antes de darle el control al manejador. 
 
-#### Implementando la interfaz (referencia a método)
-
-1. Reemplaza el código de la clase de la siguiente maner
 ```java
-public class Ejemplo1 {
+@Valid
+```
 
-   private final StringToInteger parser =  Integer::parseInt;
+El método `creaCliente` queda de la siguiente forma:
 
-    Integer sumar(String a, String b) {
-
-        return parser.convertir(a) + parser.convertir(b);
+```java
+    public ResponseEntity<Void> creaCliente(@Valid @RequestBody Cliente cliente){
+        System.out.println(cliente.getNombre());
+        return ResponseEntity.created(URI.create("1")).build();
     }
+```
+
+11. Ejecuta nuevamente la petición desde Postman. Esta vez debes obtener un error como el siguiente, que indica que la petición realizada tiene un formato incorrecto:
+
+![imagen](img/img_05.png)
+
+En la consola de IntelliJ debes tener el siguiente mensaje:
+
+```
+ Resolved [org.springframework.web.bind.MethodArgumentNotValidException: 
+ Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.lang.Void> org.bedu.java.backend.sesion3.ejemplo1.controller.ClienteController.creaCliente(org.bedu.java.backend.sesion3.ejemplo1.model.Cliente) with 3 errors: 
+ 
+ [Field error in object 'cliente' on field 'direccion': rejected value [null]; codes [NotBlank.cliente.direccion,NotBlank.direccion,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [cliente.direccion,direccion]; arguments []; default message [direccion]]; default message [Se debe proporcionar una dirección]] 
+ 
+ [Field error in object 'cliente' on field 'correoContacto': rejected value [contacto]; codes [Email.cliente.correoContacto,Email.correoContacto,Email.java.lang.String,Email]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [cliente.correoContacto,correoContacto]; arguments []; default message [correoContacto],[Ljavax.validation.constraints.Pattern$Flag;@74570cf7,.*]; default message [must be a well-formed email address]] 
+ 
+ [Field error in object 'cliente' on field 'nombre': rejected value [Bedu]; codes [Size.cliente.nombre,Size.nombre,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [cliente.nombre,nombre]; arguments []; default message [nombre],30,5]; default message [El nombre del cliente debe tener al menos 5 letras y ser menor a 30]] ]
+
+```
+![imagen](img/img_06.png)
+
+En los mensajes anteriores se indica qué campos contienen errores.
+
+12. Modifica la petición en Postman para enviar el siguiente cuerpo:
+
+```json
+{
+    "nombre": "BeduORG",
+    "correoContacto": "contacto@bedu.org",
+    "numeroEmpleados": "20",
+    "direccion": "direccion"
 }
 ```
-2. Vuelve a ejecutar la prueba
 
-Finalmente, cuando una lambda simplemente pasa su argumento a un método, podemos reemplazarla por una referencia directa a ese método, como hicimos en este caso con `Integer::parseInt`.
+13. Envía nuevamente la petición y ahora nuevamente debes obtener una respuesta correcta:
+
+![imagen](img/img_07.png)

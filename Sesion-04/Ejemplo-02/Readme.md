@@ -1,34 +1,140 @@
-## Ejemplo 2: Recolectando información de sensores con un CompletableFuture
+## Ejemplo 2: Manejo de errores extendiendo ResponseEntityExceptionHandler 
+
 
 ### Objetivo
-- Emplear la clase CompletableFuture para el procesamiento asíncrono de información.
+- Manejar los errores comunes ocurridos dentro de una aplicación web, extendiendo de la clase base `ResponseEntityExceptionHandler` de Spring.
+- Proporcionar una estructura cnsistente del manejo de errores.
 
-### Requisitos
-- JDK 8 o superior
-- IDE de tu preferencia
 
-### Desarrollo
-Basándonos en el sistema de medición del ejemplo 1, haremos los cambios necesarios para que emplee la API Future de Java. Para ello: 
+#### Requisitos
+- Tener instalado el IDE IntelliJ Idea Community Edition.
+- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
+- Tener instalada la herramienta Postman.
 
-1. Crearemos un nuevo método llamado ejemploCompletableFuture, en el que volveremos a generar la lista de valores enteros llamada id.
-2. Llamaremos también al método obtenerPromedio que realiza el cálculo de manera secuencial, para tener un punto de comparación entre nuestros resultados.
-3. Crearemos una lista de CompletableFuture mediante un stream de nuestra lista de ids, llamándolos de manera asíncrona para no esperar a que cada uno termine su procesamiento. Esto se realizará de la siguiente manera:
+
+#### Desarrollo
+
+1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
+
+2. En la ventana que se abre selecciona las siguientes opciones:
+- Grupo, artefacto y nombre del proyecto.
+- Tipo de proyecto: **Maven Project**.
+- Lenguaje: **Java**.
+- Forma de empaquetar la aplicación: **jar**.
+- Versión de Java: **11**.
+
+3. En la siguiente ventana elige **Spring Web** y **Validation** como dependencia del proyecto.
+
+4. Dale un nombre y una ubicación al proyecto y presiona el botón Finish.
+
+5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion4.ejemplo2`. Dentro crea dos subpaquetes: `model` y `controllers`.
+
+6. Dentro del paquete `model` crea una nueva clase llamada "`Cliente`" con los siguientes atributos y validaciones:
+
 ```java
-List<CompletableFuture<Double>> futuros = ids.stream()
-			//llamamos a la ejecución de la lectura de los sensores de manera asíncrona
-		.map(id -> CompletableFuture.supplyAsync(() -> new SistemaMedicion().leer(id)))
-			.collect(Collectors.toList());
+    @PositiveOrZero(message = "El identificador no puede ser un número negativo")
+    private long id;
+    @NotEmpty(message = "El nombre del cliente no puede estar vacío")
+    @Size(min = 5, max = 30, message = "El nombre del cliente debe tener al menos 5 letras y ser menor a 30")
+    private String nombre;
+    @Email
+    private String correoContacto;
+    @Min(value = 10, message = "Los clientes con menos de 10 empleados no son válidos")
+    @Max(value = 10000, message = "Los clientes con más de 10000 empleados no son válidos")
+    private String numeroEmpleados;
+    @NotBlank(message = "Se debe proporcionar una dirección")
+    private String direccion;
 ```
 
-4. Registraremos el tiempo de inicio y tiempo final, como en el caso del procesamiento secuencial. Además realizaremos las operaciones necesarias para extraer los valores de los CompletableFuture, y en base al stream obtenido calcularemos el promedio de dichos valores:
+Agrega también los *getter*s y *setter*s de cada atributo.
+
+7. En el paquete `controllers` agrega una clase llamada `ClienteController` y decórala con la anotación `@RestController`, de la siguiente forma:
+
 ```java
-LocalTime inicio = LocalTime.now(); //registramos el tiempo de inicio
-	double promedio = futuros.stream()
-			.mapToDouble(cf -> cf.join())//extraemos el valor del CompletableFuture
-			.average()                  //calculamos promedio
-			.orElse(0);
-	Duration tiempo = Duration.between(inicio, LocalTime.now());    //registramos el tiempo de fin
-	System.out.println((Math.round(promedio * 100.) / 100.) + " en " + tiempo.toMillis() + "ms"); //imprimimos el resultado
+@RestController
+@RequestMapping("/cliente")
+public class ClienteController {
+}
 ```
 
-5. Ejecutaremos nuestro código y comprobaremos el tiempo que toma a cada implementación terminar.
+8. Agrega un nuevo manejador de peticiones **POST** el cual reciba un identificador como parámetro de petición en la URL; tambén, indica que el parámetro que recibe se debe de validar, de la siguiente forma:
+
+```java
+    @PostMapping
+    public ResponseEntity<Void> creaCliente(@Valid @RequestBody Cliente cliente){
+      return ResponseEntity.created(URI.create("")).build();
+    }
+```
+
+9. Dentro del paquete `model` crea un nuevo paquete `builders`y dentro de este una clase llamada `RespuestaError`, con el siguiente contenido:
+```java
+    private final LocalDateTime timestamp = LocalDateTime.now();
+    private int estatus;
+    private Map<String, String> errores;
+    private String ruta;
+```
+Agrega también los *getter*s y los *setter*s.
+
+10. Dentro del paquete `controllers` crea un nuevo paquete llamado `handlers` y dentro de este un clase llamada `ManejadorGlobalExcepciones` que extienda a la clase `ResponseEntityExceptionHandler`. Decora esta clase con la anotación `@ControllerAdvice`:
+
+```java
+    @RestControllerAdvice
+    public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
+    
+    }
+```
+
+11. Dentro de esta clase sobreescribe el método `handleMethodArgumentNotValid` con el siguiente contenido:
+
+```java
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Map<String, String> errors = new TreeMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+            errors.put(error.getObjectName(), error.getDefaultMessage());
+        }
+        RespuestaError respuestaError = new RespuestaError();
+        respuestaError.setErrores(errors);
+        respuestaError.setRuta(request.getDescription(false).substring(4));
+        return handleExceptionInternal(
+                ex, respuestaError, headers, HttpStatus.BAD_REQUEST, request);
+    }
+```
+
+Este método se llamará cada vez que ocurra un error en una validación de datos en un objeto validado por Spring.
+
+
+12. Ejecuta la aplicación y, desde Postman, envía una petición **POST** con el siguiente contenido:
+```json
+{
+    "clienteId": 0,
+    "fechaProgramada": "2010-12-11T09:00:00",
+    "direccion": "Oficina del cliente ubicada en la ciudad de Monterrey",
+    "proposito": "Mostrarle unos productos",
+    "vendedor": "Ara"
+}
+```
+
+Debes obtener un resultado como el siguiente:
+
+![imagen](img/img_01.png)
+
+13. Ahora, envía una nueva petición con el siguiente contenido:
+```json
+{
+    "clienteId": 10,
+    "nombre": "Cliente Principal",
+    "fechaProgramada": "2020-12-11T09:00:00",
+    "direccion": "Oficina del cliente ubicada en la ciudad de Monterrey",
+    "proposito": "Mostrarle unos productos",
+    "vendedor": "Araceli García"
+}
+```
+
+Debes obtener un resutado como el siguiente:
+
+
+![imagen](img/img_02.png)
