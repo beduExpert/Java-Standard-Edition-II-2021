@@ -1,100 +1,82 @@
-## Ejemplo 1: Creación de getters, setters, constructores, equals y hashcode con @Data
+## Ejemplo 01: Usando las interfaces de RxJava
 
-### Objetivo
-- Usar las anotaciones básicas de Lombok para la generación de getters, setters, constructores, equals y hashcode.
+### Objetivos
+* Familiarizarnos con algunas de las interfaces de RxJava
 
-#### Requisitos
-- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
-- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
-- Tener instalada la herramienta Postman.
+### Prerequisitos
+* Maven
+* JDK 11
 
+### Maven
 
-#### Desarrollo
-
-1. Crea un proyecto **Maven** desde el IDE IntelliJ Idea. Este proyecto No deberá ser creado con Spring Initilizr.
-
-2. Agrega al proyecto, en el archivo **pom.xml** la dependencia de Lombok 
-
-```xml
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+Para ejecutar las pruebas de maven usa:
+```bash
+    mvn test
 ```
-3. Crea un nuevo paquete llamado `org.bedu.java.backend.sesion5.ejemplo1` y adentro crea una clase llamada `Principal` que tenga un método `main` de la siguiente forma:
+
+### Procedimiento
+
+1. Descarga el código del ejemplo 1
+
+2. Crea la clase Ejemplo1 en el paquete `org.bedujse.demo.reactive.ejemplo1`
+
+3. Define los siguientes métodos vacíos.
 ```java
-public class Principal {
-    public static void main(String[] args) {
-        
+   static  Single<Integer> sumarSingle(){
+       return null;
+   }
+
+   static Integer sumar(){
+       return null;
+   }
+```
+
+4. Crea una prueba para la clase Ejemplo1
+  ![Crear prueba](img/figura01.png)
+  
+5. Agrega el siguiente código
+```java
+    @Test
+    @DisplayName("Suma los elementos y regresa Single")
+    void sumaElementos() {
+        Ejemplo1.sumarSingle()
+                .subscribe(s -> assertThat(s).isEqualTo(21));
     }
-}
-```
 
-4. Crea un subpaquete llamado `model` y adentro de este una clase llamada `Venta`; la estructura de la aplicacion hasta ahora debe verse así:
-
-![imagen](img/img_01.png)
-
-5. En la clase `Visita` coloca los siguientes atributos, en donde dos de los atributos estan marcados como `final`:
-```java
-    private long id;
-    private final LocalDateTime fechaProgramada;
-    private String direccion;
-    private String proposito;
-    private final String vendedor;
-```
-
-6. Decora la clase `Visita` con la anotación `@Data`, la cual le dice a **Lombok** que debe generar una serie de métodos, entre los que se encuentran:
-- *getter*s de todos los atributos
-- *setter*s de todos los atributos que no sean `final`
-- `equals`, `hashcode` y `toString`
-- Constructor con todos los atributos final
-
-```java
-@Data
-public class Visita {
-    private long id;
-    private final LocalDateTime fechaProgramada;
-    private String direccion;
-    private String proposito;
-    private final String vendedor;
-}
-```
-
-7. Decora la clase con la anotación `@Builder`, la cual indica a Lombok que debe implementar el patrón **builder** en esta clase, así que automáticamente agregará todos los elementos necesarios, incluyendo un método `build`, que será el que usaremos para obtener una instancia del objeto `VistaBuilder`, el cual también generado automáticamente por Lombok.
-
-```java
-@Data
-@Builder
-public class Visita {
-    private long id;
-    private final LocalDateTime fechaProgramada;
-    private String direccion;
-    private String proposito;
-    private final String vendedor;
-}
-```
-
-8. Revisa el panel de estructura de la clase en IntelliJ en donde se muestran los metodos generádos por IntelliJ:
-
-![imagen](img/img_03.png)
-
-9. En el método `main` crea una nueva inastancia de `Vista`, usando su builder, e imprime sus valores en la consola:
-```java
-    public static void main(String[] args) {
-        Visita visita = Visita.builder().proposito("Presentar los nuevos productos")
-                .direccion("Oficina del cliente")
-                .fechaProgramada(LocalDateTime.now().plusDays(3))
-                .vendedor("Juan Manuel")
-        .build();
-
-        System.out.printf("Datos de la visita: %s%n", visita);
+    @Test
+    @DisplayName("Suma los elementos y regresa valor (bloqueante)")
+    void sumaElementosBloqueante() {
+        assertThat(Ejemplo1.sumar()).isEqualTo(21);
     }
 ```
 
-10. Ejecuta la aplicación, debes obtener un resultado como el siguiente:
+Si ejecutas la prueba en este momento obtendrás un error ya que estamos regresando `null`.
 
-![imagen](img/img_04.png)
+
+6. Reemplaza el código de la clase de la siguiente manera:
+
+**RxJavaObservableGenerator** es una clase que genera un observable a partir de una lista de números del 1 al 6.
+
+```java
+   static  Single<Integer> sumarSingle(){
+       return RxJavaObservableGenerator
+               .observableStream()
+               .reduce(0,(a,b) -> a + b);
+   }
+
+   static Integer sumar(){
+       return RxJavaObservableGenerator
+               .observableStream()
+               .reduce(0,(a,b) -> a + b)
+               .blockingGet();
+   }
+```
+7. Vuelve a ejecutar la prueba
+
+Nota que estamos usando programación funcional para reducir el conjunto de enteros a su suma. El resultado de `.reduce` es un `Single<Integer>`. En el primer método regresamos ese objeto para y en la prueba usamos `.subscribe` para hacer la acerción.
+
+En el segundo caso usamos `.blockingGet` el cual bloquea el hilo y arroja el resultado una vez que se tiene.
+
+Recuerda que debes pensar dos veces antes de usar una operación bloqueante.
+
+

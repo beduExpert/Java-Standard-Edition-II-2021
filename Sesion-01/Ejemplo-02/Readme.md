@@ -1,86 +1,62 @@
-## Ejemplo: Creación de proyecto Maven con Spring Initializr
+## Ejemplo 2
 
-### Objetivo
-- Aprender la forma de crear un proyecto Maven usando Spring Initializr.
-- Compilar, empaquetar y ejecutar la aplicación o proyecto generados desde la línea de comandos.
-- Ejecutar la aplicación desde la línea de comandos.
+### OBJETIVO
 
-#### Requisitos
-1. Tener instalado la última versión del JDK 11 (De Oracle u OpenJDK).
-2. Tener una conexión a Internet.
+- Crear una entidad usando el framework JPA junto con Spring Data para escribir y obtener información de una base de datos.
 
-#### Desarrollo
+### REQUISITOS
 
-1. Entra al sitio de [Spring Initializr](https://start.spring.io/). Ahí verás una sola página dividida en dos secciones. Comienza llenando la información de la sección del lado izquierdo. Selecciona:
-  - Tipo de proyecto: **Maven Proyect**.
-  - Lenguaje: **Java**.
-  - Versión de Spring Boot, la versión estable más reciente (al momento de escribir esto la **2.3.5**)
-  - Grupo, artefacto y nombre del proyecto.
-  - Forma de empaquetar la aplicación: **jar**.
-  - Versión de Java: **11**.
+- Apache Maven
+- Tener instalado un manejador de base de datos, de preferencia MySQL o MariaDB
+- JDK 12
 
-![imagen](img/img_01.png)
+### DESARROLLO
 
-2. En la sección de la derecha (las dependencias) presiona el botón `Add dependencies` y en la ventana que se abre busca la dependencia `Web` o `Spring Web`.
+En esta ocasión crearás una entidad sencilla y su repositorio con ayuda de Spring Data.
 
-![imagen](img/img_05.png)
+Una entidad (_@Entity_) debe ser un **POJO** (Plain Old Java Object) con las siguietnes características:
 
-3. Selecciona la dependencia `Spring Web` y con eso debes verla en la lista de las dependencias del proyecto:
+1. Todos los accesores (**getters**).
+2. Mutadores (setters) para los atributos no finales.
+3. Debe [sobrecargar los métodos hashCode e equals de manera consistente](https://www.mkyong.com/java/java-how-to-overrides-equals-and-hashcode/).
 
-![imagen](img/img_06.png) 
+Para crear el repositorio, basta con crear una **interface** que extienda **CrudRepository**.
 
-4. Presiona el botón "GENERATE" (o presiona `Ctrl` + `Enter` en tu teclado) para que comience la descarga del proyecto.
+### Procedimiento
 
-![imagen](img/img_03.png)
+#### Entidad
+1. Crea el paquete **org.bedu.javase2.ejemplo.ejemplo1.model** y en él crea la clase **Equipo**:
 
-5. Descomprime el archivo `zip` descargado, el cual tiene más o menos el siguiente contenido.
+   ![Clase](img/figura01.png)
 
-![imagen](img/img_07.png)
+2. Si analizas la descripción de la tabla equipos en la base de datos, tiene sólo un **id** (INT) y un **nombre** (varchar(45)), así que agregamos los valores correspondientes a la clase. (Nota que el **id**, aunque es entero en la base de datos, lo declaramos como **Long** en la entidad. Esto es por el tamaño (en bytes) que usa la base de datos para representar un entero).
 
-6. Abre una terminal o línea de comandos en el directorio que acabas de descomprimir y ejecuta los siguientes comandos, los cuales se ejecutan en **Maven** gracias a un *wrapper* que se distribuye dentro del paquete que acabas de descargar (Nota: si es la primera vez que ejecutas Maven en tu computadora, el comando tardará un buen rato en ejecutarse, ya que debe descargar las librerías y paquetes necesarios):
+   ![Atributos](img/figura02.png)
 
-        mvnw clean package
-      
-7. La salida del comando anterior debe ser parecida a la siguiente:
 
-![imagen](img/img_08.png)
+3. También es necesario agregar el código descrito al inicio del ejercicio. Este tipo de código es tan común que todos los IDEs tienen una opción para generarlo de forma automática, generalmente en el menú contextual.
 
-8. Una vez que todo está compilado, usa el siguiente comando para ejecutar la aplicación. 
+   ![Generador de código](img/figura03.png)
+   
+   ![Código generado](img/figura04.png)
 
-        mvnw spring-boot:run
-        
-9. Debes obtener una salida similar a la siguiente:
+4. Ahora debemos anotar nuestra clase para que pueda ser mapeada a la base de datos.
 
-![imagen](img/img_09.png)
+   ![Anotaciones](img/figura05.png)
 
-Esto indica que la aplicación se levantó correctamente en el puerto **8080**. Como no hemos colocado ningún contenido en la aplicación no hay mucho que mostrar, pero podremos comprobar que la aplicación está bien configurada, que todos los elementos necesarios están instalados y configurados y que nuestra aplicación se ejecuta de forma correcta:
+#### Repositorio
 
-      http://localhost:8080
-      
-Una vez que el sitio cargue, debes ver una pantalla como la siguiente:
+1. Crea el paquete **org.bedu.javase2.ejemplo.ejemplo1.persistence** y en él crea la interface **EquipoRepository**
 
-![imagen](img/img_10.png)
+   ![Interfaz](img/figura06.png)
 
-10. Detén la aplicación presionando `Ctrl + C` en la terminal en donde levantaste la aplicación.
+2. Indica que está extendiendo la interface **CrudRepository** y define la entidad que manejará como **Equipo** y su llave primaria como **Long**.
 
-Puesto que la aplicación está completamente contenida en un archivo `jar`, también es posible ejecutarla de otra forma.
+   ![Repositorio](img/figura07.png)
 
-11. Al compilar la aplicación con `mvnw package` se creó un directorio `target`. Navega a este directorio, el cual debe contener, entre otras cosas, un archivo `jar`.
+#### Verificación
 
-![imagen](img/img_11.png)
+1. Inicia la aplicación con maven. Si todo sale bien no debería haber error alguno.
 
-12. Abre una terminal en este directorio y ejecuta el siguiente comando (cambia el nombre del jar si en tu caso es diferente):
 
-        java -jar sesion1.ejemplo2-0.0.1-SNAPSHOT.jar
-        
-13. Con esto nuevamente debes obtener una salida como la siguiente:
 
-![imagen](img/img_12.png)
-
-Nuevamente, esto indica que la aplicación se levantó correctamente en el puerto **8080**. Como no hemos colocado ningún contenido en la aplicación no hay mucho que mostrar, pero podremos comprobar que la aplicación está bien configurada, que todos los elementos necesarios están instalados y configurados y que nuestra aplicación se ejecuta de forma correcta:
-
-      http://localhost:8080
-      
-Una vez que el sitio cargue, debes ver una pantalla como la siguiente:
-
-![imagen](img/img_13.png)

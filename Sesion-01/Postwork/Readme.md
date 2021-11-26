@@ -1,24 +1,28 @@
-## Postwork Sesión 01
 
-### Objetivo
-Crear la estructura de tu proyecto personal, el cual implementará las funciones básicas de un sistema para **CRM** (*Customer Relationship Management*), el cual es un software de apoyo a la gestión de las relaciones con los clientes, a la venta y al marketing.
+## Postwork: Bases de datos
 
-En este primer Postwork crearás el proyecto *Maven* desde IntelliJ Idea que servirá para implementar, a lo largo de resto de las sesiones, la estructura básica del CRM.
+### OBJETIVO
 
-#### Desarrollo   
-- Crea un nuevo proyecto Maven desde IntelliJ Idea.
-- Selecciona Spring Initializr como tipo de proyecto.
-- Selecciona las siguientes opciones para tu proyecto:
-    - Herramienta de construcción: **Maven**
-    - Lenguaje de programación: **Java 11**
-    - Versión de Spring Boot: la más actual que no sea un `SNAPSHOT` ni un `RC`.
-- Agrega `Spring Web` como dependencia de tu proyecto.
-- Genera el proyecto en tu IDE y ejecútalo para asegurarte de que todo está configurado correctamente.
+- Reafirmar los conocimientos vistos durante la sesión 1.
+- Crear las entidades y repositorios que usaremos para la creación del proyecto personal.
 
-**-Nota:** También puedes generar tu proyecto desde el sitio de [Spring Initializr](https://start.spring.io/), descargarlo en tu computadora e importarlo en IntelliJ Idea desde el menú `File -> New -> Project from Existing Sources`:
+#### REQUISITOS
 
-![imagen](img/img_01.png)
+1. MySQL instalado y configurado.
+2. Apache Maven.
+3. JDK 12.
 
-El resultado final debe ser una página similar a la siguiente, la cual debe verse en tu navegador al entrar a la dirección [http://localhost:8080](http://localhost:8080)
+#### DESARROLLO
 
-![imagen](img/img_02.png)
+Estos son los diagramas de clase y entidad-relación de la aplicación que crearemos:
+
+![Clases](img/Diagrama_de_clases.png)
+
+![ER](img/Diagrama_ER.png)
+
+Crea las entidades y repositorios y define una prueba de humo que te ayude a validar que funcione corréctamente.
+
+Querrás buscar documentación de las anotaciones **@ElementCollection**, **@CollectionTable** y **@MapKeyJoinColumn**.
+
+
+

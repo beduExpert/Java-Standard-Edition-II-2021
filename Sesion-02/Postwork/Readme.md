@@ -1,72 +1,20 @@
-## Postwork Sesión 02
+## Postwork Sesión 2: Cálculo de promedios mediante hilos 
 
-### Objetivo
-- Crear una serie de modelos que representarán la información que es manejada por el CRM.
-- Crear la estructura de los servicios que permitirán implementar las diferentes funcionalidades del CRM.
-- Crear los paquetes que representarán cada una de las capas de la aplicación.
+### OBJETIVO 
 
+- Aplicar los conocimientos del uso de hilos en Java en un proyecto real. 
 
-#### Desarrollo   
+#### REQUISITOS 
 
-1. Crea los siguientes paquetes en el proyecto principal:
-    - *model*
-    - *controllers*
-    - *persistence*
-    - *services*
-2. Crea dentro de paquete "`model`" las siguientes clases:
-    - *Cliente*
-    - *Visita*
-    - *Producto*
-    - *Venta*
-    - *Etapa*
+1. JDK 8 o superior
+2. IDE de tu preferencia
+3. Postwork de la sesión anterior
 
-Estas clases están vacías por el momento (no tendrán atributos)
+#### DESARROLLO
+El postwork para esta sesión consiste en el cálculo de los promedios para cada Curso, pero este se llevará a cabo utilizando un hilo para cada uno de los cursos registrados para acelerar esta operación y tener los resultados de la manera más rápida posible, puedes visualizar el flujo general que tomará la aplicación en el diagrama 1.
 
-3. Crea dentro del paquete "`controllers`" las siguientes clases y decóralas con la anotación "`@RestController`".
-    - *ClienteController*
-    - *ProductoController*
-    - *VisitaController*
-    - *VentaController*
-    - *EtapaController*
-    
-4. Dentro de cada uno de los servicios coloca métodos que permitan crear, leer, actualizar y eliminar recursos (objetos del paquete `model`). Para ello tendrás que usar los métodos HTTP: **GET**, **POST**, **PUT** y **DELETE**.
+![diagrama1](img/diagrama1.png)
 
-Tus servicios deben seguir este patrón:
+Deberás crear al menos 4 cursos diferentes que contengan una lista de al menos 20 alumnos cada uno y para cada uno de estos cursos se calculará el promedio que obtuvieron los estudiantes en ese curso imprimiéndolo en consola junto con el nombre del curso.
 
-```java
-@RestController
-@RequestMapping("/cliente")
-public class ClienteController {
-
-    @GetMapping("/{clienteId}")
-    public ResponseEntity<Cliente> getCliente(@PathVariable Long clienteId){
-
-    }
-
-    @GetMapping
-    public ResponseEntity <List<Cliente>> getClientes(){
-
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
-
-    }
-
-    @PutMapping("/{clienteId}")
-    public ResponseEntity<Void> actualizaCliente(@PathVariable Long clienteId, @RequestBody Cliente cliente){
-
-    }
-
-    @DeleteMapping("/{clienteId}")
-    public ResponseEntity<Void> eliminaCliente(@PathVariable Long clienteId){
-
-    }
-}
-```
-
-
-La estructura de tu proyecto debe quedar de la siguiente forma:
-
-![imagen](img/img_01.png)
-
+Se recomienda que uses un Executor como el empleado en el último ejemplo para que puedas optimizar el uso de los recursos, creando un Runnable que contenga cada uno de los Cursos y de ahí extraigas la información de las calificaciones de los alumnos.

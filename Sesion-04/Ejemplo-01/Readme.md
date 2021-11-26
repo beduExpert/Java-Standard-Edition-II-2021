@@ -1,85 +1,46 @@
-## Ejemplo 1: Manejo de errores con ResponseStatusException
+## Ejemplo 1: Recolectando información de sensores
 
 ### Objetivo
-- Regresar los estatus de respuesta más adecuados cuando ocurre un error al procesar una petición.
+- Aplicar una simulación de una aplicación en el mundo real del procesamiento asíncrono
 
-#### Requisitos
-- Tener instalado el IDE IntelliJ Idea Community Edition.
-- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
-- Tener instalada la herramienta Postman.
+### Requisitos
+- JDK 12
+- IDE de tu preferencia
 
+### Desarrollo
+Imaginemos que tenemos un sistema que recolecta la información de 10 sensores distintos cada cierto tiempo y calcula el promedio de los valores obtenidos. 
+Implementaremos la lectura y el cálculo de dicha información de manera secuencial y de manera paralela y compararemos el tiempo que le toma a cada una de las formas el realizar el cálculo.
 
-#### Desarrollo
-
-1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
-
-2. En la ventana que se abre selecciona las siguientes opciones:
-- Grupo, artefacto y nombre del proyecto.
-- Tipo de proyecto: Maven Project.
-- Lenguaje: Java.
-- Forma de empaquetar la aplicación: jar.
-- Versión de Java: 11.
-
-3. En la siguiente ventana elige Spring Web como dependencia del proyecto.
-
-4. Dale un nombre y una ubicación al proyecto y presiona el botón Finish.
-
-5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion4.ejemplo1`. Dentro crea dos subpaquetes: `model` y `controllers`.
-
-6. Dentro del paquete `model` crea una nueva clase llamada "`Cliente`" con los siguientes atributos:
-
-- long id
-- String nombre
-- String correoContacto
-- String numeroEmpleados
-- String direccion  
-
-Agrega también los *getter*s y *setter*s de cada atributo.
-
-7. En el paquete `controllers` agrega una clase llamada `ClienteController` y decórala con la anotación `@RestController`, de la siguiente forma:
-
+1. Agregaremos una nueva clase llamada **SistemaMedicion**, que tendrá un método **leer** que recibirá el id del sensor para el que se leerá el valor y retornará un valor double, cuya implementación será la siguiente:
 ```java
-@RestController
-@RequestMapping("/cliente")
-public class ClienteController {
-
+double leer(int id){
+	try{
+		TimeUnit.MILLISECONDS.sleep(100);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
+	return id * Math.random();
 }
 ```
 
-8. Agrega un nuevo manejador de peticiones **GET** el cual reciba un identificador como parámetro de petición en la URL, de la siguiente forma:
-
+2. A nuestra clase **Main** agregaremos un método estático llamado **obtenerPromedio**. Dentro de este método tomaremos el tiempo que le lleva a cada implementación realizar el cálculo. Su implementación es:
 ```java
-    @GetMapping("/{clienteId}")
-    public ResponseEntity<Cliente> getCliente(@PathVariable long clienteId){
-
-    }
+static void obtenerPromedio(Stream <Integer> ids){
+	LocalTime inicio = LocalTime.now(); //registramos el tiempo de inicio
+	double promedio = ids.mapToDouble(id -> new SistemaMedicion().leer(id)) //pasamos el stream de números a nuestro sensor
+			.average()      //calcula el promedio de los valores
+			.orElse(0); // retorna 0 si no pudo obtener los valores
+	Duration tiempo = Duration.between(inicio, LocalTime.now());    //registramos el tiempo de fin
+	System.out.println((Math.round(promedio * 100.) / 100.) + " en " + tiempo.toMillis() + "ms"); //imprimimos el resultado
+}
 ```
 
-9. Dentro de este agrega el siguiente codigo, el cual busca al cliente con el identificador esperado, si lo encuentra (que para este ejemplo serán los que tengan un id menor a 10), entonces regresará un objeto cliente con el id solicitado. Si lo encuentra validará que el usuario tenga permiso para leer la información de ese cliente (los que tengan un id menor a 5). Si el usuario no tiene permiso para leer la información del cliente obtendrá como resultado un código de respuesta **403** (Forbidden), si no lo encuentra obtendrá como respuesta un código de error **404** (Not Found), si lo encuentra y tiene permiso simplemente lo regresará. Para regresar los códigos de respuesta para los casos de error usaremos la clase `ResponseStatusException`, de la siguiente forma:
-
+3. Por último, dentro de nuestro main crearemos una lista del 1 al 10 y la pasaremos a nuestro método obtenerPromedio, una vez de forma secuencial y la otra de forma paralela:
 ```java
-    @GetMapping("/{clienteId}")
-    public ResponseEntity<Cliente> getCliente(@PathVariable long clienteId){
-        if(clienteId > 10) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El cliente con el id especificado no existe.");
-        }
-
-        if (clienteId > 5){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tiene permiso para visualizar al cliente indicado.");
-        }
-          
-        Cliente cliente = new Cliente();
-        cliente.setId(clienteId);
-        cliente.setNombre("Cliente");
-        
-        return ResponseEntity.ok(cliente);
-    }   
+List<Integer> ids = IntStream.range(1, 11)
+			.mapToObj(i -> i)
+			.collect(Collectors.toList()); //creamos una lista del 1 al 10
+	obtenerPromedio(ids.stream());          //procesamiento concurrente
+	obtenerPromedio(ids.parallelStream());  //procesamiento paralelo
 ```
-
-10. Ejecuta la aplicación y realiza unas peticiones desde Postman, deberías obtener los siguientes resultados:
-
-![imagen](img/img_01.png)
-
-![imagen](img/img_02.png)
-
-![imagen](img/img_03.png)
+4. Ejecutaremos nuestro código y compararemos el tiempo que le toma a cada implementación realizar el cálculo, sin preocuparnos porque los valores obtenidos de promedio serán distintos debido a que se obtienen números aleatorios en cada medición.

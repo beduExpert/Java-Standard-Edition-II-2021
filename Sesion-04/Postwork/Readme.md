@@ -1,16 +1,20 @@
-## Postwork Sesión 04
+## Postwork Sesión 4: Inscripción de estudiantes
 
-### Objetivo
-- Agregar manejadores de errores globale que maneje errores genrados por el usuario, como datos enviados de forma incorrecta y el uso de métodos HTTP no soportados.
-- Permitir al usuario seleccionar el formato del contenido en el que desea recibir las respuestas por parte de los servicios.
+### OBJETIVO 
 
-#### Desarrollo   
-1. Agrega un manejador de errores a tu proyecto, usando una clase que extienda de ResponseEntityExceptionHandler. Sobreescribe los siguientes métodos:
-- handleMethodArgumentNotValid
-- handleHttpRequestMethodNotSupported 
+- Aplicar los conocimientos de la programación asíncrona mediante un proyecto real.
 
-2. El manejador anterior deberá regresar como respuesta a los errores objetos de tipo RespuestaError, como los vistos durante la sesión.
+#### REQUISITOS 
 
-3. Agrega las siguientes dependencias de Maven en el archivo pom.xml, para indicar que se permitirá que el usuario del API indique el formato en el que quiere recibir las respuestas.
+1. JDK 8 o superior
+2. IDE de tu preferencia
+3. Postwork de la sesión anterior
 
+#### DESARROLLO
+El director de la escuela te ha pedido que implementes un sistema de inscripción de alumnos que notifique al maestro cuando un alumno se haya inscrito a un curso y además le muestre la cantidad de alumnos que tiene su curso, sin bloquear la plataforma para que más estudiantes puedan inscribirse al mismo tiempo.
 
+Es por esto que han considerado que la implementación más fácil será mediante el uso de un EventLoop que reciba la información del alumno y el curso al que se quiere inscribir, notificando en un worker al maestro de la inscripción.
+
+Tu tarea consiste en implementar el EventLoop necesario para esta plataforma, así como el worker que notifique al maestro.
+El diagrama 1 muestra cómo sería el flujo del EventLoop
+![diagrama1](img/diagrama1.png)

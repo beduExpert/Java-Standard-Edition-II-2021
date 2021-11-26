@@ -1,157 +1,135 @@
-## Ejemplo 1: Persistencia de datos con Spring Data JPA
 
-### Objetivo
-- Hacer uso de las anotaciones básicas de JPA para indicar qué objeto debe ser tratado como una entidad de base de datos.
-- Aprender qué es un repositorio y los métodos por default que ofrece.
+## Ejemplo 01: Clases Genéricas
 
-#### Requisitos
-- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
-- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
-- Tener instalada la herramienta Postman.
-- Tener instalada la base de datos MySQL y los datos del usuario para conectarse
+### Objetivos
+* Crear una clase que use _Generics_ para comprender su uso
 
+### Procedimiento
 
-#### Desarrollo
+1. Crea un nuevo proyecto con el siguiente pom.xml 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
+    <groupId>org.bedu.jse2</groupId>
+    <artifactId>generics</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-2. En la ventana que se abre selecciona las siguientes opciones:
-- Grupo, artefacto y nombre del proyecto.
-- Tipo de proyecto: **Maven Project**.
-- Lenguaje: **Java**.
-- Forma de empaquetar la aplicación: **jar**.
-- Versión de Java: **11**.
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-3. En la siguiente ventana elige **Spring Web**, **Lombok**, **Spring Data JPA** y **MySQL Driver** como dependencia del proyecto.
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-![imagen](img/img_01.png)
-
-4. Dale un nombre y una ubicación al proyecto y presiona el botón *Finish*.
-
-5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion6.ejemplo1`. Dentro crea los subpaquetes: `controllers`, `model` y `persistence`.
-
-6. Dentro del paquete `model` crea una clase llamada `Cliente` con los siguientes atributos:
-```java
-    private Long id;
-    private String nombre;
-    private String correoContacto;
-    private int numeroEmpleados;
-    private String direccion;
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
 ```
-7. Decora la clase con la anotación `@Data` de *Lombok*:
+1. Agrega una clase Holder en el paquete org.bedu.jse2.generics con el siguiente contenido
 ```java
-@Data
-public class Cliente {
+package org.bedu.jse2.generics;
 
+public class Holder<E> {
+
+    private E object;
+
+    void hold(E object){
+        this.object = object;
+    }
+
+    E release(){
+        return object;
+    }
 }
 ```
-
-8. Decora también la clase con las siguientes anotaciones de JPA:
+1. Crea una clase de prueba para la clase con el siguiente contenido inicial
 ```java
-@Entity
-@Table(name = "CLIENTE")
-public class Cliente {
+package org.bedu.jse2.generics;
 
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HolderTest {
+
+    private class ClasePropia {
+        private  final String nombre;
+        private final Integer edad;
+
+        ClasePropia(String nombre, Integer edad){
+            this.nombre = nombre;
+            this.edad = edad;
+        }
+
+        public String getNombre(){
+            return nombre;
+        }
+
+        public Integer getEdad(){
+            return edad;
+        }
+    }
 }
 ```
-
-9. Decora los atributos `id`, `correoContacto` y `numeroEmpleados` con las siguientes anotaciones (`nombre` y `direccion` permanecen igual)
+1. Agrega una primera prueba para validar que nuestra clase puede almacenar un entero.
 ```java
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nombre;
+    @Test
+    @DisplayName("Puede guardar un Integer")
+    void entero(){
+        Integer entero = 123;
+        Holder<Integer> holder = new Holder<>();
+        holder.hold(entero);
 
-    @Column(name = "correo_contacto", length = 30)
-    private String correoContacto;
+        assertEquals(entero, holder.release());
 
-    @Column(name = "numero_empleados")
-    private int numeroEmpleados;
-
-    private String direccion;
-```
-
-10. En el paquete `persistence` crea una **interface** llamada `ClienteRepository` que extienda de `JpaRepository`. Esta interface permanecerá sin métodos:
-```java
-public interface ClienteRepository  extends JpaRepository<Cliente, Long> {
-
-}
-```
-
-11. En el paquete `controllers` crea una nueva clase llamada `ClienteController` y decórala con las anotaciones de Spring MVC para indicar que esta clase es un controlador web.
-```java
-@RestController
-@RequestMapping("/cliente")
-public class ClienteController {
-
-}
-```
-
-12. Crea un método **POST** que reciba un objeto `Cliente` como parámetro y regrese un código de respuesta **201**:
-```java
-    @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
-        return ResponseEntity.created(URI.create("")).build();
     }
 ```
-
-13. Agrega un atributo `final` de tipo `ClienteRepository`:
-
+1. Agrega una prueba para validar que nuestra clase puede almacenar un string.
 ```java
-private final ClienteRepository clienteRepository;
-```
+    @Test
+    @DisplayName("Puede guardar un String")
+    void string(){
+        String str = "Hola mundo";
+        Holder<String> holder = new Holder<>();
+        holder.hold(str);
 
-14. Usa la anotación `@RequiredArgsConstructor` de *Lombok*, el cual agregará un constructor que reciba el objeto `ClienteRepository` y lo inyecte en el controlador.
-```java
-@RestController
-@RequestMapping("/cliente")
-@RequiredArgsConstructor
-public class ClienteController {
+        assertEquals(str, holder.release());
 
-    private final ClienteRepository clienteRepository;
-}
-```
-
-15. Dentro del método `creaCliente` usa el objeto `clienteRepository` para guardar el objeto cliente en base de datos. Usa el `id` del objeto almacenado para regresarlo en la respuesta del método.
-```java
-    @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
-
-        Cliente clienteDB = clienteRepository.save(cliente);
-
-        return ResponseEntity.created(URI.create(clienteDB.getId().toString())).build();
     }
+
 ```
-
-16. En el directorio resources busca o crea el archivo `application.properties` 
-
-![imagen](img/img_02.png)
-
-Coloca el siguiente contenido en el archivo (los valores entre los signos `<` y `>` reemplazalos con tus propios valores):
-```
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.hibernate.generate_statistics=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.url=jdbc:mysql://localhost:3306/bedu?serverTimezone=UTC
-spring.datasource.username=<usuario>
-spring.datasource.password=<password>
-```
-
-17. Ejecuta la aplicación y envía la siguinte petición desde Postman:
+1. Agrega una prueba para validar que nuestra clase puede almacenar nuestra clase propia.
 ```java
-{
-    "nombre": "BeduORG",
-    "correoContacto": "contacto@bedu.org",
-    "numeroEmpleados": "20",
-    "direccion": "direccion"
-}
+    @Test
+    @DisplayName("Puede guardar una clase propia")
+    void custom(){
+
+        ClasePropia cp = new ClasePropia("Juan", 20);
+
+        Holder<ClasePropia> holder = new Holder<>();
+        holder.hold(cp);
+
+        assertEquals(cp.getNombre(), "Juan");
+        assertEquals(cp.getEdad(), 20);
+
+    }
+
 ```
-
-debes tener la siguiente respuesta en la consola de Postman:
-
-![imagen](img/img_03.png)
-
-18. Revisa la base de datos, la tabla `CLIENTE` debe haberse creado de forma automática y debe tener almacenado el registro con los datos enviados desde Postman:
-
-![imagen](img/img_04.png)

@@ -1,78 +1,106 @@
-## Ejemplo 3: Negociación de contenido
+## Ejemplo 3: Event loop
 
 ### Objetivo
-- Mostrar las formas que Spring MVC ofrece para poder regresarle al usuario una respuesta usando en formatos o tipos de contenido.
-- Indicar si una respuesta debe recibirse en formato JSON o en formato XML.
+- Crear un event loop sencillo que permita manejar distintos tipos de eventos.
 
-#### Requisitos
-- Tener instalado el IDE IntelliJ Idea Community Edition.
-- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
-- Tener instalada la herramienta Postman.
+### Requisitos
+- JDK 8 o superior
+- IDE de tu preferencia
 
-#### Desarrollo
-1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
+### Desarrollo
+Como ya vimos, un event loop es un hilo que se ejecuta continuamente y recibe eventos que son pasados a métodos diferentes que son conocidos como event handlers o workers. En este caso crearemos un event loop simple que recibirá instancias de objetos y llamará a un event handler que reaccionará dependiendo del tipo de la instancia recibida.
 
-2. En la ventana que se abre selecciona las siguientes opciones:
-- Grupo, artefacto y nombre del proyecto.
-- Tipo de proyecto: **Maven Project**.
-- Lenguaje: **Java**.
-- Forma de empaquetar la aplicación: **jar**.
-- Versión de Java: **11**.
-
-3. En la siguiente ventana elige **Spring Web** como dependencia del proyecto.
-
-4. Dale un nombre y una ubicación al proyecto y presiona el botón Finish.
-
-5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion4.ejemplo3`. Dentro crea dos subpaquetes: `model` y `controllers`.
-
-6. Dentro del paquete `model` crea una nueva clase llamada "`Producto`" con los siguientes atributos:
-
+1. Crearemos una interfaz llamada **EventHandler**, que será la interfaz que tendremos que implementar para definir nuestros worker para los eventos que reciba nuestro event loop. En esta interfaz definiremos un método llamado **procesarEvento** que recibirá un Object:
 ```java
-    private long id;
-    private String nombre;
-    private float precio;    
+public interface EventHandler {
+    void procesarEvento(Object evento);
+}
 ```
 
-Agrega también los *getter*s y *setter*s de cada atributo.
-
-7. En el paquete `controllers` agrega una clase llamada `ProductoController` y decórala con la anotación `@RestController`, de la siguiente forma:
-
+2. Crearemos ahora una clase llamada **EventLoopSimple**, misma que implementará la interfaz Runnable de Java. Nuestra clase tendrá una bandera que definirá si sigue en ejecución, una lista de tareas pendientes y un EventHandler que será el que ejecute las tareas pendientes:
 ```java
-@RestController
-@RequestMapping("/producto")
-public class ProductoController {
+public class EventLoopSimple implements Runnable {
+
+    private boolean enEjecucion = false;
+    private Queue<Object> listaTareas = new LinkedList<>();
+    private final EventHandler worker;
+}
+```
+
+3. Agregaremos también un constructor donde pasaremos el EventHandler que requiramos para nuestra implementación y definiremos el método **run** obligado por la interfaz Runnable. En este método tendremos un ciclo que se ejecutará mientras la variable enEjecucion lo diga o mientras tengamos tareas pendientes en nuestra lista. Desde aquí llamaremos a nuestro worker pasándole los eventos que vamos recibiendo y esperaremos un tiempo entre cada vez que ejecutamos el ciclo. Si no tenemos tareas pendientes esperaremos 1 segundo a que se reciban más tareas:
+```java
+public EventLoopSimple(EventHandler worker) {
+	this.worker = worker;
+}
+
+@Override
+public void run() {
+	try{
+		while(enEjecucion || !listaTareas.isEmpty()){
+			Object evento = listaTareas.poll();
+
+			if(evento == null){
+				System.out.println("No hay eventos pendientes, esperando 1s...");
+				TimeUnit.SECONDS.sleep(1);
+			}
+			worker.procesarEvento(evento);
+			TimeUnit.MILLISECONDS.sleep(100);
+		}
+	} catch (InterruptedException e) {
+		enEjecucion = false;
+		e.printStackTrace();
+	}
 
 }
 ```
 
-8. Agrega un nuevo manejador de peticiones **GET**, de la siguiente forma:
-
+3. Definiremos también los métodos auxiliares para iniciar, detener, registrar eventos y consultar el estado de nuestro worker:
 ```java
-    @GetMapping(value = "/{productoId}")
-    public ResponseEntity<Producto> getProducto(@PathVariable long productoId){
-        Producto producto = new Producto();
-        producto.setNombre("nombre del producto");
-        producto.setId(productoId);
-        producto.setPrecio(1.00f);
+public void iniciar(){
+	this.enEjecucion = true;
+	new Thread(this).start();
+}
 
-        return ResponseEntity.ok(producto);
-    }
+public void detener(){
+	this.enEjecucion = false;
+}
+
+public void registrarEvento(Object evento){
+	listaTareas.add(evento);
+}
+
+public boolean isEnEjecucion(){
+	return enEjecucion;
+}
 ```
 
-9. En el archivo `pom.xml` agrega la siguiente dependencia:
-```xml
-  <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-  </dependency>
+4. Ahora, en nuestro método main crearemos una instancia de EventLoopSimple y crearemos un EventHandler mediante una expresión lambda. En este handler manejaremos eventos de tipo String y de tipo Number, imprimiendo el valor recibido en consola:
+```java
+EventLoopSimple eventLoop = new EventLoopSimple(evento -> {
+   if(evento instanceof String){
+	   System.out.println("String recibido: " + evento);
+   }
+   else if(evento instanceof Number){
+	   System.out.println("Número recibido: " + evento);
+   }
+});
 ```
 
-10. Ejecuta la aplicación y, desde Postman, envía una petición **GET** a la siguiente URL: `http://localhost:8080/producto/5`. Debes obtener un resultado como el siguiente:
+5. Iniciaremos nuestro Event Loop, registraremos nuestro primer evento y esperaremos 500ms para que se ejecute. Después registraremos otros 3 eventos y finalizaremos nuestro programa.
+```java
+eventLoop.iniciar();
+eventLoop.registrarEvento("Hola mundo");
 
-![imagen](img/img_01.png)
+try {
+	TimeUnit.MILLISECONDS.sleep(500); //simulando acciones diferentes con un sleep
+} catch (InterruptedException e) {
+	e.printStackTrace();
+}
+eventLoop.registrarEvento(1);
+eventLoop.registrarEvento("Adiós");
+eventLoop.registrarEvento(10.0);
 
-11. En Postman agrega una cabecera llamada `Accept` que tenga como valor `application/xml` y envía nuevamente la petición, ahora debes obtener un resultado en formato XML:
+eventLoop.detener();
+```
 
-![imagen](img/img_02.png)
-
-![imagen](img/img_03.png)
+6. Por último ejecutaremos nuestra aplicación y comprobaremos los resultados que obtenemos en la consola.

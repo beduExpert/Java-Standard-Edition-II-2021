@@ -1,94 +1,25 @@
-## Reto 1: Manejo de errores con ResponseStatusException
+## Reto 1: Cálculo de las ganancias diarias para un conjunto de franquicias
 
 ### Objetivo
-- Regresar los estatus de respuesta más adecuados cuando ocurre un error al procesar una petición.
+- Aplicar el procesamiento paralelo para acelerar el cálculo de la suma del total de ganancias obtenidas por una cadena de restaurantes por todas sus sucursales.
 
-#### Requisitos
-- Tener instalado el IDE IntelliJ Idea Community Edition.
-- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
-- Tener instalada la herramienta Postman.
+### Requisitos
+- JDK 12
+- IDE de tu preferencia
 
+### Desarrollo
+Una conocida cadena de hamburguesas quiere realizar cambios en su infraestructura empleando el procesamiento paralelo para acelerar el cálculo de las ganancias diarias, sumando las ganancias obtenidas por cada una de sus sucursales, las cuales tienen un identificador numérico del 0 al 1000.
+El tiempo que toma obtener la información de cada sucursal es de 50ms, que deberás simular mediante un sleep en el método que te permita obtener la información de esa sucursal.
+Las ganancias esperadas para una sucursal promedio van desde los $10000 hasta los $50000.
 
-#### Desarrollo
-- Crea un nuevo proyecto Spring Boot en IntelliJ Idea como lo hiciste en la primera sesión.
-- Crea una nueva clase que represente un recurso de tipo `Producto` con los siguientes atributos:
-    - long id
-    - String nombre
-    - float precio
-- Crea una nueva clase que represente un servicio REST, unando la anotación @RestController.
-- Crea un nuevo manejador de peticiones **POST** que reciba como un parámetro un objeto `Producto`; si el precio es mayor a 1.00 y se proporciona un nombre se debe regresar un código de respuesta **201**(CREATED). Si se proporciona un id se debe regresar un código de respuesta **404** (NOT_FOUND). Si no se cumple ninguna de las condiciones anteriores se debe regresar un código de respuesta **400** (BAD_REQUEST).
-- Hacer la prueba desde la herramienta Postman.
-
-
+Este reto consiste en simular la implementación de este sitema, generando una clase **CadenaRestaurantes** que contenga un método **obtenerGananciasFranquicia**, que retornará el valor numérico con las ganancias del día para el id presentado. Puedes basarte en el proyecto creado para la lectura de los sensores, pero la función será ahora una suma en lugar del promedio de los valores.
 
 <details>
 	<summary>Solución</summary>
-  
-1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
+	
+ 1. Dentro de la clase **CadenaRestaurantes**, en el método **obtenerGananciasFranquicia** deberás colocar un sleep de 50ms y después de este retornar un número aleatorio acotado entre 10000 y 50000, para ello puedes usar la función Math.random multiplicada por 10000 y finalmente ese valor multiplicado por un número aleatorio entre 1 y 5.
+	
+ 2. Para el cálculo de la suma en lugar del promedio, puedes basarte en la implementación de **obtenerPromedio** creada durante el ejemplo 1 y realizar el cambio en el método mapToDouble, en lugar de llamar al método average se empleará el método sum y nos dará la suma de los valores contenidos en el Stream que se obtienen de nuestra **CadenaRestaurantes**.
 
-2. En la ventana que se abre selecciona las siguientes opciones:
-- Grupo, artefacto y nombre del proyecto.
-- Tipo de proyecto: **Maven Project**.
-- Lenguaje: **Java**.
-- Forma de empaquetar la aplicación: **jar**.
-- Versión de Java: **11**.
-
-3. En la siguiente ventana elige Spring Web como dependencia del proyecto.
-
-4. Dale un nombre y una ubicación al proyecto y presiona el botón Finish.
-
-5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion4.reto1`. Dentro crea dos subpaquetes: `model` y `controllers`.
-
-6. Dentro del paquete `model` crea una nueva clase llamada "`Producto`" con los siguientes atributos:
-- long id
-- String nombre
-- float precio
-
-Agrega también los *getter*s y *setter*s de cada atributo.
-
-7. En el paquete `controllers` agrega una clase llamada `ProductoController` y decórala con la anotación `@RestController`, de la siguiente forma:
-
-```java
-@RestController
-@RequestMapping("/producto")
-public class ProductoController {
-
-}
-```
-
-8. Agrega un nuevo manejador de peticiones **POST** el cual reciba un identificador como parámetro de petición en la URL, de la siguiente forma:
-
-```java
-    @PostMapping
-    public ResponseEntity<Void> creaProducto(@RequestBody Producto producto){
-        
-    }
-```
-
-9. Dentro de este agrega el siguiente codigo:
-
-```java
-    @PostMapping
-    public ResponseEntity<Void> creaProducto(@RequestBody Producto producto){
-        if(producto.getId() > 0){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El cliente con el id especificado no existe.");
-        }
-
-        if(producto.getPrecio() >= 1 && !producto.getNombre().isBlank()){
-            return ResponseEntity.created(URI.create("")).build();
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Los parámetros proporcionados no son correctos.");
-    }
-```
-
-10. Ejecuta la aplicación y realiza unas peticiones desde Postman, deberías obtener los siguientes resultados:
-
-![imagen](img/img_01.png)
-
-![imagen](img/img_02.png)
-
-![imagen](img/img_03.png)
-
+3. No olvides realizar los cambios en la creación de la lista de ids para que ahora coincida con los 1000 restaurantes que se estarán controlando.
 </details>
-

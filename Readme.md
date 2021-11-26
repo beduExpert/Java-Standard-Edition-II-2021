@@ -1,25 +1,19 @@
+ 
+## Módulo: Java Standard Edition Intermedio
 
-## Módulo: Introducción a Java Backend
+### OBJETIVO 
+ - Conocer algunos conceptos y elementos intermedios en el lenguaje de programación Java.
+ - Conocer prácticas que te ayudarán a convertirte en mejor programador y a aplicar conceptos de diseño de clases.
 
-### Objetivo
-Adquirir los conocimientos necesarios para el desarrollo del motor de aplicaciones web usando el Framework de Spring 5 y su módulo **Spring Boot**, aprendiendo la forma de estructurar una aplicación para agregar funcionalidades de acceso a datos. 
+ ### ORGANIZACIÓN DE MÓDULO 
+ 
+ - [Sesión 1: Gestión de base de datos](Sesion-01): 
+ - [Sesión 2: Multi Hilos y procesos concurrentes](Sesion-02): 
+ - [Sesión 3: Programación Funcional](Sesion-03): 
+ - [Sesión 4: Procesos asincronos](Sesion-04): 
+ - [Sesión 5: Stream Reactivos](Sesion-05): 
+ - [Sesión 6: Clases Genéricas](Sesion-06): 
+ - [Sesión 7: Microservicios](Sesion-07): 
+ - [Sesión 8: Buenas Practicas](Sesion-08):
 
 
-
-### Organización Del Módulo
-
- - [Sesión 1: Introducción a Spring 5 y Spring Boot 2](Sesion-01)
-
- - [Sesión 2: Servicios web RESTFul con Spring MVC](Sesion-02)
-
- - [Sesión 3: Spring MVC Validation](Sesion-03)
-
- - [Sesión 4: Manejo de errores y negociación de contenido](Sesion-04)
-
- - [Sesión 5: Project Lombok y MapStruct](Sesion-05)
-
- - [Sesión 6: Spring Data JPA](Sesion-06)
-
- - [Sesión 7: Pruebas unitarias e integrales](Sesion-07)
-
- - [Sesión 8: Spring MVC RestDoc](Sesion-08)

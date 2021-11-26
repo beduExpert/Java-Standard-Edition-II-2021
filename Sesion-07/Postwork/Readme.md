@@ -1,20 +1,36 @@
-## Postwork Sesión 7
+## Postwork 07
 
-### Objetivo
-- Tener un entendimiento básico de qué es una prueba unitaria.
-- Aplicar pruebas unitarias en Spring Boot usando los objetos proporcionados por Spring Test.
+A lo largo de este proyecto reafirmaremos lo que se ha aprendido durante las sesiones.
 
+### Módulo 7 - Microservicios
 
-#### Desarrollo   
-1. Termina la implementación de los métodos de negocio, que se encuentran en la capa services de la aplicación, para tener las funcionalidades básicas de guardado, eliminación, bajas y actualizaciones de cada uno de los tipos de entidad.
+Modificar el proyecto del Reto 3: 
 
-2. Para el paso anterior será necesario implementar las funcionalidades en todas las capas de la aplicación, desde los controladores hasta los repositorios para el manejo de los datos almacenados.
+En el archivo pom cambiar la siguiente dependendecia:
 
-3. Agrega pruebas unitarias de cada uno de los métodos existentes en los controladores usando el objeto MockMvc de Spring
+```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+```
 
-4. Implementa una serie de pruebas integrales usando el objeto TestRestTemplate proporcionado por Spring. Recuerda que este objeto ejecuta la aplicación, por lo tanto modificará la información existente en tu base de datos.
+Por la siguiente:
 
-5. Asegúrate que al final todas las pruebas se ejecuten de forma correcta:
+```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+    </dependency>
+```
 
+Ahora ocupando una base de datos MongoDB la cual se llamara "empleado" 
 
-![imagen](img/img_01.png)
+Modificamos la clase EmpleadoRepository pasarla a ser una interfaz:
+
+```java
+    public interface EmpleadoRepository extends ReactiveMongoRepository<Empleado, String>{
+    }
+```
+
+Y finalmente modificar el controlador con los metodos que nos devuelve la interfaz.

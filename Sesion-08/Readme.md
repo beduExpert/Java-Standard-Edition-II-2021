@@ -1,19 +1,13 @@
-# Sesión 8: Spring MVC RestDoc
+## Sesión 08: Buenas prácticas
 
-## Objetivos
-- Aprender a generar documentación de servicios, basada en las pruebas unitarias de una aplicación 
-- Aprender la forma de personalizar la documentación generada con RestDoc
-- Distribuir la documentación de los servicios para ser consumida por otro desarrollador.
+### OBJETIVOS 
 
-## Organización de la clase
+- Conocer algunas de las buenas prácticas implementadas por los profesionales de la industría de desarrollo.
 
-- Configuración de Spring Mock MVC para usar RestDoc y Documentación de parámetros de peticiones
-  - [Ejemplo 1](Ejemplo-01)
-  - [Reto 1](Reto-01)
+#### ORGANIZACION DE LA CLASE 
 
-- Documentación de respuestas y personalizaciones a la documentación
-  - [Ejemplo 2](Ejemplo-02)
-  - [Reto 2](Reto-02)
+- Principios de diseño
 
-- Distribución de la documentación dentro de la aplicación
-    - [Ejemplo 3](Ejemplo-03)
+	- [Ejemplo 01](Ejemplo-01)
+	- [Reto 01](Reto-01)
+

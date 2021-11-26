@@ -1,24 +1,21 @@
 
-# Sesión 2: Servicios Web RESTful con Spring MVC
+## Sesión 02: Multithreading y procesamiento concurrente
 
-## Objetivos
-- Aprender qué son los servicios web REST y sus características.
-- Conocer el modelo de madurez de Richardson para conocer el grado de apego de nuestros servicios REST. En este curso nos apegaremos al nivel 2.
-- Aplicar los métodos HTTP **GET**, **POST**, **PUT** y **DELETE**.
-- Crear nnuestros primeros servicios REST usando Spring MVC. 
+### OBJETIVOS 
 
-## Organización de la clase
+- Comprender la diferencia entre un proceso y un hilo
+- Conocer la utilidad de la programación mediante el uso de hilos.
+- Conocer la clase Thread y la interfaz Runnable de Java, así como la forma de crear hilos con ellas.
 
-- Creación de controladores de lectura con Spring MVC
-    - [Ejemplo 1](Ejemplo-01)
-    - [Reto 1](Reto-01)
+#### ORGANIZACION DE LA CLASE 
 
-- Cración y actualización de información
-    - [Ejemplo 2](Ejemplo-02)
-    - [Reto 2](Reto-02)
-        
-- Borrado de información
-    - [Reto 3](Reto-03)
- 
-
-
+- Creación de hilos extendiendo la clase Thread
+	- [Ejemplo 01](Ejemplo-01)
+	- [Reto 01](Reto-01)
+	
+- Creación de hilos extendiendo la interface Thread	
+	- [Ejemplo 02](Ejemplo-02)
+	- [Reto 02](Reto-02)
+	
+- Uso de Thread	Pools
+	- [Ejemplo 03](Ejemplo-03)

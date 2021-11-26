@@ -1,234 +1,43 @@
-## Ejemplo 3: Uso de Lombok y MapSctruct con Spring Boot
+## Ejemplo 03: Modificando un Flux en un servicio intermedio
 
-### Objetivo
-- Crear una interfaz básica de MapStruct que permita mapear de un objeto `Cliente` a un objeto `ClienteDto` y viceversa.
-- Decorar las clases anteriores con las anotaciones de Lombok para autogenerar sus métodos *setter*, *getter*, constructores, etc.
-- Hacer que Spring inyecte de forma automática el objeto *Mapper* creado por MapStruct en los controladores usando las anotaciones de Lombok.
+### Objetivos
+* Aprender a usar servicios intermedios no bloqueantes
 
-#### Requisitos
-- Tener instalado el IDE IntelliJ Idea Community Edition con el plugin de Lombok activado.
-- Tener instalada la última versión del JDK 11 (de Oracle u OpenJDK).
+### Prerequisitos
+* Maven
+* JDK 11
 
+### Maven
 
-#### Desarrollo
-
-1. Crea un proyecto Maven usando Spring Initializr desde el IDE IntelliJ Idea.
-
-2. En la ventana que se abre selecciona las siguientes opciones:
-- Grupo, artefacto y nombre del proyecto.
-- Tipo de proyecto: **Maven Project**.
-- Lenguaje: **Java**.
-- Forma de empaquetar la aplicación: **jar**.
-- Versión de Java: **11**.
-
-3. En la siguiente ventana elige **Spring Web** y **Lombok** como dependencia del proyecto.
-
-4. Dale un nombre y una ubicación al proyecto y presiona el botón *Finish*.
-
-5. En el proyecto que se acaba de crear debes tener el siguiente paquete `org.bedu.java.backend.sesion5.ejemplo3`. Dentro crea los subpaquetes: `model`, `dtos`  y `controllers`. Dentro del paquete `dtos` crea un subpaquete `mappings`.
-
-6. Agrega al proyecto, en el archivo **pom.xml** las dependencias de MapStruct (las de Lombok se agregaron al momento de crear el proyecto):
-
-```xml
-<properties>
-    <java.version>11</java.version>
-    <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-</properties>
-
-
-<dependencies>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${org.mapstruct.version}</version>
-            <optional>true</optional>
-        </dependency>
-</dependencies>
+Para ejecutar las pruebas de maven usa:
+```bash
+    mvn test
 ```
 
-7. Agrega el plugin de Maven para MapStruct, el cual se encargará de generar el código para realizar el mapeo correspondiente.
-```xml
-  <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.16</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.1.0</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-```
+### Procedimiento
 
-8. Dentro del paquete `model` crea una clase llamada `Cliente` con los siguientes atributos:
+1. En el código del ejemplo existe una arquitectura de tres capas (controlador - servicio - repositorio). En este ejercicio sólo debes modificar la clase E3Service 
+
+2. Ejecuta la prueba para saber qué es lo que se espera.
+
+3. Agrega el siguiente código a E3Service
+
 ```java
-    private long id;
-    private String nombre;
-    private String correoContacto;
-    private int numeroEmpleados;
-    private String direccion;
-```
-9. Decora esta clase con las anotaciones `@Data` y `@Builder` de Lombok:
-```java
-@Data
-@Builder
-public class Cliente {
-    private long id;
-    private String nombre;
-    private String correoContacto;
-    private int numeroEmpleados;
-    private String direccion;
-}
-```
+    public Flux<String> getListaNombre(){
+        return REPOSITORY
+                .getPersonas()
+                .map(this::formatearNombre);
+    }
 
-10. Dentro del paquete `dtos` agrega una clase llamada `ClienteDto` con los siguientes atributos. También anota esta clase con `@Data` y `@Builder`:
-```java
-@Data
-@Builder
-public class ClienteDto {
-    private String nombre;
-    private String numeroEmpleados;
-    private String direccion;
-}
-```
-
-11. Dentro del paquete `mappings` crea una **interface** llamada `ClienteMapper` y decórala con la anotación `@Mapper`:
-```java
-    @Mapper
-    public interface ClienteMapper {
-    
+    private String formatearNombre(PersonaEntity persona){
+        return String.format("%s %s, %s", persona.getPrimerApellido(), persona.getSegundoApellido(), persona.getNombre());
     }
 ```
 
-12. En la anotación `@Mapper` agrega el atributo `componentModel` con el valor de `spring`. Esto le indica a MapStruct que debe marcar la clase generada para que pueda funcionar como un componente de Spring.
-```java
-@Mapper(componentModel = "spring")
-public interface ClienteMapper {
+4. Vuelve a ejecutar la prueba
 
-}
-```
+En este ejemplo aprendimos a manipular un Flux sin necesidad de bloquearlo. Recuerda que debemos evitar bloquar hilos no-bloqueantes para poder mantener la responsividad del sistema.
 
-12. Agrega los siguientes métodos dentro de la interface `ClienteMapper`, el primero le dice a MapStruct que debe crear un método que transforme de un `ClienteDto` (que recibe como parámetro) a un `Cliente` (que es el objeto que el método regresará). El segundo método hace lo opuesto, recibe un objeto `Cliente` y regresa un objeto `ClienteDto` con los atribtos mapeados provenientes del `Cliente`. MapStruct se encargará de crear una implementación de esta interface.
+Toma en cuenta que, aunque la arquitectura en tres capas es muy común, en este caso se simplificó su uso, esto es, este no es un ejemplo real.
 
-```java
-    Cliente clienteDtoToCliente(ClienteDto clienteDto);
 
-    ClienteDto clienteToClienteDto(Cliente cliente);
-```
-
-La interface completa debe verse de esta forma:
-
-```java
-@Mapper(componentModel = "spring")
-public interface ClienteMapper {
-    Cliente clienteDtoToCliente(ClienteDto clienteDto);
-
-    ClienteDto clienteToClienteDto(Cliente cliente);
-}
-```
-
-13. En el paquete `controllers` agrega una clase llamada `ClienteController` y decórala con la anotación `@RestController`:
-
-```java
-@RestController
-@RequestMapping("/cliente")
-public class ClienteController {
-
-}
-```
-
-14. Agrega un nuevo manejador de peticiones **POST** que reciba un identificador como parámetro Un objeto de tipo `Cliente`:
-```java
-
-    @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
-
-        return ResponseEntity.created(URI.create("1")).build();
-    }
-```
-
-15. Declara una instancia de tipo `ClienteMapper` en el controlador y úsala dentro del método `creaCliente` para obtener un objeto de tipo `ClienteDto` con los valores del objeto `Cliente` recibido e imprime sus valores en consola:
-```java
-@RestController
-@RequestMapping("/cliente")
-public class ClienteController {
-
-    private final ClienteMapper mapper;
-
-    @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
-
-        ClienteDto clienteDto = mapper.clienteToClienteDto(cliente);
-
-        System.out.println(clienteDto);
-
-        return ResponseEntity.created(URI.create("1")).build();
-    }
-
-}
-```
-
-16. Agrega al nivel de la clase la anotación `@RequiredArgsConstructor` de Lombok para crear un constructor que reciba los atributos marcados como `final`, en este caso el el objeto `ClienteMapper`. Al final la clase debe quedar de esta forma:
-```java
-@RestController
-@RequestMapping("/cliente")
-@RequiredArgsConstructor
-public class ClienteController {
-
-    private final ClienteMapper mapper;
-
-    @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
-
-        ClienteDto clienteDto = mapper.clienteToClienteDto(cliente);
-
-        System.out.println(clienteDto);
-
-        return ResponseEntity.created(URI.create("1")).build();
-    }
-
-}
-```
-
-17. Ejecuta la aplicación y envía el siguiente objeto JSon desde Postman:
-```json
-{
-    "nombre": "BeduORG",
-    "correoContacto": "contacto@bedu.org",
-    "numeroEmpleados": "20",
-    "direccion": "direccion"
-}
-```
-
-18. Debes recibir la siguiente respuesta en Postman:
-
-![imagen](img/img_02.png)
-
-y debes tener el siguiente mensaje en la consola de IntelliJ:
-
-![imagen](img/img_03.png)
