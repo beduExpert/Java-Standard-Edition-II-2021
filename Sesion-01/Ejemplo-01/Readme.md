@@ -1,17 +1,19 @@
-## Ejercicio 01
+# Ejemplo 01
 
 **Prerequisitos**
 
-* Tener instalado MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
-* Tener instalado Apache Maven
-* Tener instalado el JDK 12
+- MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
+- IntelliJ IDEA Community Edition
+- Tener instalado 
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK) 17
 
 **Objetivo** 
 
 - Hacer uso del Spring Data para configurar la conexión a la base de datos
 
-#### Preparativos
-1. Clona el proyecto del ejercicio - [Código](codigo)
+### Preparativos
+1. Clona el proyecto del ejemplo - [Código](codigo)
 
 2. En la ruta **src/main/resouces/sql** se encuentran los archivos de inicialización de la base de datos. Ejecuta desde una línea de comandos:
 
@@ -46,7 +48,7 @@ Se puede inicializar una aplicación de Spring Boot con Maven usando el siguient
 
 2. Abre el archivo **src/main/resources/application.properties**. Ahí escribe los valores para la conexión a la base de datos:
 
-		spring.datasource.url=jdbc:mysql://localhost/BEDU_JSE2
+		spring.datasource.url=jdbc:mariadb://localhost/BEDU_JSE2
 		spring.datasource.username=usuario
 		spring.datasource.password=PASSWD
 
@@ -55,3 +57,12 @@ Se puede inicializar una aplicación de Spring Boot con Maven usando el siguient
 3. Vuelve a ejecutar la aplicación con maven. Esta vez no debe haber ningún error.
 
    ![Conexión DB](img/figura03.png)
+
+
+</br>
+
+¡Felicidades! Completaste el primer ejemplo.
+
+</br>
+
+[Siguiente ](../Reto-01/Readme.md)(Reto 1)
