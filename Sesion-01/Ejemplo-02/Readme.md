@@ -7,7 +7,7 @@
 ## Requisitos
 
 - Apache Maven 3.8.4 o superior
-- Tener instalado un manejador de base de datos, de preferencia MySQL o MariaDB
+- Manejador de base de datos, de preferencia MySQL o MariaDB
 - JDK (o OpenJDK) 17
 
 ## Desarrollo

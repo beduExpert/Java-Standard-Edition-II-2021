@@ -14,7 +14,6 @@ datos) y objetos (POO/Java).
 
 - MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
 - IntelliJ IDEA Community Edition
-- Tener instalado 
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK) 17
 
@@ -43,3 +42,6 @@ datos) y objetos (POO/Java).
 	- [Ejemplo 03](./Ejemplo-03/Readme.md)
 	- [Reto 03](./Reto-03/Readme.md)
 
+- Postwork
+
+	- [Postwork](./Postwork/Readme.md)
