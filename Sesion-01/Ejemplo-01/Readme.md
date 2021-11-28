@@ -58,10 +58,10 @@ Se puede inicializar una aplicación de Spring Boot con Maven usando el siguient
    ![Conexión DB](img/figura03.png)
 
 
-</br>
+<br/>
 
 ¡Felicidades! Completaste el primer ejemplo.
 
-</br>
+<br/>
 
 [Siguiente ](../Reto-01/Readme.md)(Reto 1)

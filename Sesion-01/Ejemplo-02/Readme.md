@@ -122,10 +122,10 @@ Para crear el repositorio, basta con crear una **interface** que extienda **Crud
 
    1. Inicia la aplicación con maven. Si todo sale bien no debería haber error alguno.
 
-</br>
+<br/>
 
 ¡Felicidades! Creaste tu primer entidad.
 
-</br>
+<br/>
 
 [Siguiente ](../Reto-02/Readme.md)(Reto 2)

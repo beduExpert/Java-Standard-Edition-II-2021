@@ -8,12 +8,12 @@
 		<version>2.6.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.bedu.javase2.ejemplo</groupId>
-	<artifactId>ejemplo1</artifactId>
+	<groupId>org.bedu.postwork</groupId>
+	<artifactId>javase2-project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>ejemplo1</name>
-	<description>Demo project for Spring Boot</description>
+	<name>javase2-project</name>
+	<description>Ejercicio de postwork para el curso Java SE 2</description>
 
 	<properties>
 		<java.version>17</java.version>

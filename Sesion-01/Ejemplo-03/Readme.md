@@ -97,10 +97,10 @@ equipos.
 
    ![Prueba dos](img/figura07.png)
 
-</br>
+<br/>
 
 ¡Felicidades! Creaste tu primer set de pruebas.
 
-</br>
+<br/>
 
 [Siguiente ](../Reto-03/Readme.md)(Reto 3)

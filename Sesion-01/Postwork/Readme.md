@@ -25,7 +25,7 @@ Crea las entidades y repositorios y define una prueba de humo que te ayude a val
 Querrás buscar documentación de las anotaciones **@ElementCollection**, **@CollectionTable** y **@MapKeyJoinColumn**.
 
 <br/>
-</br>
+<br/>
 
 [Regresar ](../Readme.md)(Sesión 01)
 

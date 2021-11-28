@@ -129,6 +129,6 @@ Deberás hacer uso de las anotaciones **@ManyToOne** y **@JoinColumn**.
 
 </details>
 
-</br>
+<br/>
 
 [Siguiente ](../Ejemplo-03/Readme.md)(Ejemplo 3)

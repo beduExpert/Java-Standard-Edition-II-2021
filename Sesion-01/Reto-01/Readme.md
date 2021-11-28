@@ -36,6 +36,6 @@ En este reto deberás modificar los datos de conexión para que la aplicación p
 
 </details>
 
-</br>
+<br/>
 
 [Siguiente ](../Ejemplo-02/Readme.md)(Ejemplo 2)

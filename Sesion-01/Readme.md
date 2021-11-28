@@ -17,13 +17,13 @@ datos) y objetos (POO/Java).
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK) 17
 
-## 🎩  OBJETIVOS 
+## 🎩  Objetivos 
 
 - Que el alumno aprenda las interfaces para conectarse y hacer consultas a una base de datos.
 - Comprender el modelo de abstracción usado en Java para las bases de datos.
 - Aprender las ventajas de usar un ORM y JPA.
 
-#### ORGANIZACION DE LA CLASE 
+## Organización de la clase 
 
 - Creación y configuración de una base de datos y conexión mediante Spring Data JPA
 
