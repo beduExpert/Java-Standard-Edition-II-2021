@@ -1,13 +1,16 @@
-# Reto 2: Implementando la interfaz Runnable
+# Reto 02: Implementando la interfaz Runnable
 
-### Objetivo
+## Objetivo
+
 - Cambiar la implementación del Reto 1 para que use la interfaz Runnable en lugar de la clase Thread.
 
-### Requisitos
-- JDK 12
-- IDE de tu preferencia
+## Requisitos
 
-### Desarrollo
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK) 17
+
+## Desarrollo
+
 Este reto consiste en que realices los cambios necesarios en el proyecto del reto anterior para que en lugar de heredar desde la clase Thread emplees la interfaz Runnable para realizar las siguientes dos tareas:
 
 - En el hilo de usuario deberás imprimir los números del 1 al 10 cada segundo.
@@ -15,6 +18,8 @@ Este reto consiste en que realices los cambios necesarios en el proyecto del ret
 
 Recuerda que debes instanciar e iniciar los objetos necesarios para cada hilo desde el método main de tu aplicación y la lógica principal de cada hilo está ubicada en el método run de tu clase hilo.
 Recuerda también que los objetos que implementan Runnable deben estar contenidos en uno de tipo Thread para poder ejecutarlos.
+
+<br/>
 
 <details>
 	<summary>Solución</summary>
@@ -26,4 +31,19 @@ Recuerda también que los objetos que implementan Runnable deben estar contenido
  3. Deberás marcar el segundo objeto Thread como daemon, para que su ejecución finalice cuando termine el primero.
 
  4. Recuerda llamar al método start de cada uno de los Thread.
+
+	```java
+    Thread t1 = new Thread(new Hilo1());
+	Thread t2 = new Thread(new Hilo2());
+	t2.setDaemon(true);
+
+	t1.start();
+	t2.start();
+    ```
+
 </details>
+
+<br/>
+<br/>
+
+[Siguiente ](../Ejemplo-03/Readme.md)(Ejemplo 3)
