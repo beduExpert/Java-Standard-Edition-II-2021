@@ -3,7 +3,7 @@
 ### Objetivos
 * Familiarizarnos con microprofile
 
-### Prerequisitos
+### Requisitos
 * Maven
 * JDK 11
 

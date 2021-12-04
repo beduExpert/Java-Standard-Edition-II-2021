@@ -3,7 +3,7 @@
 ### Objetivos
 * Familiarizarnos con algunas de las interfaces de RxJava
 
-### Prerequisitos
+### Requisitos
 * Maven
 * JDK 11
 

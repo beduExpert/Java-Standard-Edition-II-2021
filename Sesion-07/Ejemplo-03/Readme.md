@@ -3,7 +3,7 @@
 ### Objetivos
 * Spring boot WebFlux
 
-### Prerequisitos
+### Requisitos
 * Maven
 * JDK 11
 * Postman

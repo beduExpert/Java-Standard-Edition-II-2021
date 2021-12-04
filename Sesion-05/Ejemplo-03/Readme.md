@@ -3,7 +3,7 @@
 ### Objetivos
 * Aprender a usar servicios intermedios no bloqueantes
 
-### Prerequisitos
+### Requisitos
 * Maven
 * JDK 11
 

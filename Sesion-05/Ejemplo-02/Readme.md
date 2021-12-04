@@ -4,7 +4,7 @@
 ### Objetivos
 * Familiarizarnos con algunas de las interfaces de Project Reactor
 
-### Prerequisitos
+### Requisitos
 * Maven
 * JDK 11
 

@@ -1,6 +1,6 @@
 # Ejemplo 01
 
-**Prerequisitos**
+**Requisitos**
 
 - MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
 - IntelliJ IDEA Community Edition
