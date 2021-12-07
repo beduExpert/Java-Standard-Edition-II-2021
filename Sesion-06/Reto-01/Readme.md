@@ -1,6 +1,7 @@
-## Reto 1
+# Reto 1
 
-### Objetivos
+## Objetivos
+
 * Crear una clase que convierta entre dos tipos distingos 
 
 En el Ejercicio 1 creamos una clase que puede almacenar un objeto genérico.
@@ -10,16 +11,58 @@ Para este ejercicio crea una clase que permita convertir un objeto cualquiera a 
 <details>
   <summary>Solución</summary>
 
-  <ol>
-      <li>Agrega una nueva prueba como se muestra<li>
-         <img src="img/figura01.png" alt="Nueva prueba"/>
-      <li>Crea una clase con la siguiente definición</li>
-         <img src="img/figura02.png" alt="Método"/>
-      <li>Vuelve a ejecutar la prueba</li>
-  </ol>
+  1. Agrega una nueva prueba como se muestra
+    
+      <img src="img/figura01.png" alt="Nueva prueba"/>
 
-<p>
-    En este caso aprovechamos el método toString que está definido en la cima de la jerarquía de objetos Java (Object).
-</p>
+      ```java
+      @Test
+      @DisplayName("Convierte enteros")
+      void string() {
+          Integer integer = 5242;
+          String expected = "5242";
+
+          Converter<Integer> integerConverter = new Converter<>();
+
+          assertEquals(expected, integerConverter.convertir(integer));
+      }
+
+      @Test
+      @DisplayName("Convierte un Boolean")
+      void booleano() {
+          Boolean aBoolean = Boolean.TRUE;
+          String expected = "true";
+
+          Converter<Boolean> integerConverter = new Converter<>();
+
+          assertEquals(expected, integerConverter.convertir(aBoolean));
+      }
+      ```
+  
+  2. Crea una clase con la siguiente definición
+    
+      <img src="img/figura02.png" alt="Método"/>
+
+      ```java
+      public class Converter <E> {
+
+        public String convertir(E param){
+            return param.toString();
+        }
+      }
+      ```
+  
+  3. Vuelve a ejecutar la prueba
+
+      <img src="img/figura03.png" alt="Método"/>
+
+  En este caso aprovechamos el método toString que está definido en la cima de la jerarquía de objetos Java (Object).
 
 </details>
+
+
+
+<br/>
+<br/>
+
+[Siguiente ](../Ejemplo-02/Readme.md)(Ejemplo 02)

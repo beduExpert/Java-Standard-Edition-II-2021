@@ -1,96 +1,107 @@
+# Ejemplo 01: Clases Genéricas
 
-## Ejemplo 01: Clases Genéricas
+## Objetivos
 
-### Objetivos
-* Crear una clase que use _Generics_ para comprender su uso
+* Crear una clase que use _Generics_ para comprender su uso.
 
-### Procedimiento
+## Requisitos
 
-1. Crea un nuevo proyecto con el siguiente pom.xml 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK)
 
-    <groupId>org.bedu.jse2</groupId>
-    <artifactId>generics</artifactId>
-    <version>1.0-SNAPSHOT</version>
+## Procedimiento
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+1. Crea un nuevo proyecto con el siguiente pom.xml
 
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.5.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <modelVersion>4.0.0</modelVersion>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-        </plugins>
-    </build>
-</project>
-```
-1. Agrega una clase Holder en el paquete org.bedu.jse2.generics con el siguiente contenido
-```java
-package org.bedu.jse2.generics;
+        <groupId>org.bedu.jse2</groupId>
+        <artifactId>generics</artifactId>
+        <version>1.0-SNAPSHOT</version>
 
-public class Holder<E> {
+        <properties>
+            <maven.compiler.source>11</maven.compiler.source>
+            <maven.compiler.target>11</maven.compiler.target>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        </properties>
 
-    private E object;
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>5.5.2</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
 
-    void hold(E object){
-        this.object = object;
-    }
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                </plugin>
+            </plugins>
+        </build>
+    </project>
+    ```
 
-    E release(){
-        return object;
-    }
-}
-```
-1. Crea una clase de prueba para la clase con el siguiente contenido inicial
-```java
-package org.bedu.jse2.generics;
+2. Agrega una clase Holder en el paquete org.bedu.jse2.generics con el siguiente contenido:
 
+    ```java
+    package org.bedu.jse2.generics;
 
-import static org.junit.jupiter.api.Assertions.*;
+    public class Holder<E> {
 
-class HolderTest {
+        private E object;
 
-    private class ClasePropia {
-        private  final String nombre;
-        private final Integer edad;
-
-        ClasePropia(String nombre, Integer edad){
-            this.nombre = nombre;
-            this.edad = edad;
+        void hold(E object){
+            this.object = object;
         }
 
-        public String getNombre(){
-            return nombre;
-        }
-
-        public Integer getEdad(){
-            return edad;
+        E release(){
+            return object;
         }
     }
-}
-```
-1. Agrega una primera prueba para validar que nuestra clase puede almacenar un entero.
-```java
+    ```
+
+3. Crea una clase de prueba para la clase con el siguiente contenido inicial
+    
+    ```java
+    package org.bedu.jse2.generics;
+
+    import static org.junit.jupiter.api.Assertions.*;
+
+    class HolderTest {
+
+        private class ClasePropia {
+            private  final String nombre;
+            private final Integer edad;
+
+            ClasePropia(String nombre, Integer edad){
+                this.nombre = nombre;
+                this.edad = edad;
+            }
+
+            public String getNombre(){
+                return nombre;
+            }
+
+            public Integer getEdad(){
+                return edad;
+            }
+        }
+    }
+    ```
+
+4. Agrega una primera prueba para validar que nuestra clase puede almacenar un entero.
+    
+    ```java
     @Test
     @DisplayName("Puede guardar un Integer")
     void entero(){
@@ -99,11 +110,11 @@ class HolderTest {
         holder.hold(entero);
 
         assertEquals(entero, holder.release());
-
     }
-```
-1. Agrega una prueba para validar que nuestra clase puede almacenar un string.
-```java
+    ```
+5. Agrega una prueba para validar que nuestra clase puede almacenar un string.
+
+    ```java
     @Test
     @DisplayName("Puede guardar un String")
     void string(){
@@ -112,12 +123,12 @@ class HolderTest {
         holder.hold(str);
 
         assertEquals(str, holder.release());
-
     }
+    ```
 
-```
-1. Agrega una prueba para validar que nuestra clase puede almacenar nuestra clase propia.
-```java
+6. Agrega una prueba para validar que nuestra clase puede almacenar nuestra clase propia.
+
+    ```java
     @Test
     @DisplayName("Puede guardar una clase propia")
     void custom(){
@@ -129,7 +140,15 @@ class HolderTest {
 
         assertEquals(cp.getNombre(), "Juan");
         assertEquals(cp.getEdad(), 20);
-
     }
+    ```
 
-```
+    ![Prueba](./img/img_01.png)
+
+<br/>
+
+¡Felicidades! Completaste el primer ejemplo.
+
+<br/>
+
+[Siguiente ](../Reto-01/Readme.md)(Reto 1)
