@@ -3,6 +3,7 @@
 ## Objetivo 
 
 - Aplicar los conocimientos de la programación asíncrona mediante un proyecto real.
+- Practicar el uso del EventLoop, a través de su uso para implementar un sistema de registro de alumnos.
 
 ## Requisitos 
 
