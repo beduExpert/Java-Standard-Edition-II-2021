@@ -12,7 +12,7 @@ A lo largo de este proyecto reafirmaremos lo que se ha aprendido durante las ses
 
 ## Desarrollo
 
-Uno de los principales uso de Generics es poder implementar algoritmos independientes de sus parámetros.
+Uno de los principales usos de Generics es poder implementar algoritmos independientes de sus parámetros.
 
 Crea una implementación del algoritmo [Merge Sort](https://www.tutorialspoint.com/data_structures_algorithms/merge_sort_algorithm.htm) que cumpla con la siguiente interfaz:
 
