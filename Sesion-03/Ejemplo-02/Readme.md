@@ -11,9 +11,7 @@
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK)
 
-## Desarrollo
-
-### Maven
+## Maven
 
 Para ejecutar las pruebas de maven usa:
 
@@ -21,7 +19,7 @@ Para ejecutar las pruebas de maven usa:
 mvn test
 ```
 
-## Procedimiento
+## Desarrollo
 
 - Clase contenedora
 

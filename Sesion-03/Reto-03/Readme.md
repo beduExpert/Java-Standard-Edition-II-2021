@@ -4,19 +4,36 @@
 
 - Realizar una High Order Function para transformar valores.
 
+## Requisitos
+
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK)
+
+## Maven
+
+Para ejecutar las pruebas de maven usa:
+
+```bash
+mvn test
+```
+
 ## Desarrollo
-Ejemplo
+
 En el Ejemplo 3 creamos un método capaz de recibir un una lista de enteros y una función que los transforma, sumando los valores. 
 
-Para este reto deberás implementar el siguiente método que aplicará un filtro para aplicar la transformación sólo a los valores deseados.
+1. Para este reto deberás implementar el siguiente método que aplicará un filtro para aplicar la transformación sólo a los valores deseados.
 
-```java
-Integer filtrarTransformarYSumar(List<Integer> conjunto, Predicate<Integer> filtro, IntUnaryOperator funcion);
-```
+      Agrega el método dentro de una nueva clase llamada Ejemplo3.
+
+      ```java
+      Integer filtrarTransformarYSumar(List<Integer> conjunto, Predicate<Integer> filtro, IntUnaryOperator funcion);
+      ```
+
+2. Una vez agregado el método, ejecuta la prueba desde la clase **Ejemplo3Test**
 
 <br/>
 
-<!-- <details> -->
+<details>
   <summary>Solución</summary>
 
  1. Agrega un caso de prueba con el valor esperado:

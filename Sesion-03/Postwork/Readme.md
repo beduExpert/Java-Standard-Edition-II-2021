@@ -1,23 +1,57 @@
 # Postwork 03
 
-## Objetivo
+## 🎩 Objetivo
 
-- A lo largo de este proyecto reafirmaremos lo que se ha aprendido durante las sesiones.
+- Practicar lo aprendido sobre programación funcional.
+- Utilizando programación funcional
+- Hacer uso de la programación funcional para generar y ordenar una lista de datos (descendente y ascendente).
+
+## 🎯 Requisitos
+
+- MySQL instalado y configurado
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK) 17
+
+## 🚀 Desarrollo
+
+Completa las siguientes instrucciones para completar tu tercer postwork:
+
+1. Utiliza el proyecto del postwork 2.
+
+2. Crea un nuevo package con el nombre de tools 
+
+3. Genera la clase ReporteCalificaciones la cual se encargará de:
+
+    - Generar la lista
+    - Ordena alfabéticamente (Curso)
+    - Ordena por calificaciones (Descendente)
+    - ***Recuerda utilizar map, sort, collect**
+
+4. Crea la prueba ReporteCalificacionesTest la cual se encargará de generar:
+    - Materia
+    - Estudiantes (Por lo menos tres)
+    - Curso
+    - Enviar la información a la clase creada en el paso tres
+
+5. Agrega las siguientes pruebas a ReporteCalificacionesTest:
+
+    - Ordena alfabéticamente (Curso)
+    - Ordena por calificaciones (Descendente)
+
 
 <br/>
 
-## Módulo 3 - Programación funcional
+## ✅ Checklist 
 
-Crea una clase que reciba un objeto Curso y que pueda generar una lista de calificaciones ordenada por orden alfabético (ascendente) o por calificaciones (descendente).
+Asegúrate que tu postwork contenga todo lo siguiente, ya que esto se evaluará al término del módulo.
 
-<br/>
+- [ ] ReporteCalificaciones puede generar la lista de calificaciones.
 
-![Nueva función](img/img_01.png)
+- [ ] ReporteCalificaciones puede ordenar cursos y calificaciones.
 
-![Nueva función](img/img_02.png)
+- [ ] ReporteCalificacionesTest ejecuta las funciones de ReporteCalificaciones para generar y ordenar los datos
 
-![Nueva función](img/img_03.png)
-
+- [ ] Las pruebas se ejecutan con éxito. (Sin warnings y/o errores)
 
 <br/>
 <br/>

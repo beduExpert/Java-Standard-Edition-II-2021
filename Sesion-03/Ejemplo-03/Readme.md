@@ -10,13 +10,15 @@
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK)
 
-## Desarrollo
+## Maven
 
 Para ejecutar las pruebas de maven usa:
 
 ```bash
 mvn test
 ```
+
+## Desarrollo
 
 - Clase contenedora
 

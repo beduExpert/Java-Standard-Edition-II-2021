@@ -1,9 +1,26 @@
 # Reto 01
 
 ## Objetivo
+
 - Usar las interfaces propias de Java para poder realizar la conversión de un objeto de tipo **String** a un objeto de tipo **Integer**.
 
-En el Ejemplo 1 creamos nuestra propia interfaz para convertir un `String` en un entero. Reemplaza esta interfaz propia por una de las genéricas que proporciona Java. 
+## Requisitos
+
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK)
+
+## Maven
+
+Para ejecutar las pruebas de maven usa:
+```bash
+mvn test
+```
+
+## Desarrollo
+
+En el Ejemplo 1 creamos nuestra propia interfaz para convertir un `String` en un entero. 
+
+Para completar este reto reemplaza la interfaz propia por una de las genéricas que proporciona Java.
 
 <br/>
 

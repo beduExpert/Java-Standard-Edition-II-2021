@@ -4,13 +4,32 @@
 
 - Realizar una High Order Function un proceso para recibir un conjunto de enteros y realizar la suma de todos ellos.
 
+## Requisitos
+
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK)
+
+## Maven
+
+Para ejecutar las pruebas de maven usa:
+```bash
+mvn test
+```
+
 ## Desarrollo
 
-En el Ejemplo 2 creamos un método capaz de recibir un objeto Iterable de enteros y una función que los transforma. Para este reto deberás implementar el siguiente método
+En el Ejemplo 2 creamos un método capaz de recibir un objeto Iterable de enteros y una función que los transforma. 
 
-  ```java
-  Integer transformarYSumar(Iterable<Integer> conjunto, Function<Integer, Integer> funcion);
-  ```
+1. Para completar este reto deberás implementar el siguiente método, la cual debe transformar el número recibido para posteriormente sumarlo.
+
+    ```java
+    Integer transformarYSumar(Iterable<Integer> conjunto, Function<Integer, Integer> funcion);
+    ```
+
+    Dentro de la clase ejemplo 2.
+
+2. Una vez agregado el método, ejecuta la prueba desde la clase **Ejemplo2Test**
+
 
 <br/>
 
