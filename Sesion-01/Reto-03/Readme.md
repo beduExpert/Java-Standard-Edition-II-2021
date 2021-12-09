@@ -2,11 +2,13 @@
 
 ## Objetivo
 
-- En el Ejemplo 03 creaste un QueryMethod para la búsqueda de equipo por nombre. En este reto crearás un método para buscar un partido por el nombre de los partidos.
+- Practicar las pruebas unitarias, para buscar un partido por su nombre en la tabla de Equipos.
 
 ## Requisitos
 
-- Haber terminado el Ejemplo 03
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK) 17
+- Proyecto con pruebas unitarias (Proyecto del ejemplo 02)
 
 ## Desarrollo
 

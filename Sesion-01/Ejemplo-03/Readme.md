@@ -9,18 +9,20 @@
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK) 17
 
-### Desarrollo
+## Maven
 
 En este ejercicio harás uso de pruebas de integración (Spring + JUnit) para verificar el funcionamiento del repositorio de
 equipos.
 
-**_Nota_**: Para ejecutar las prebas con maven usa el comando
+**_Nota_**: Para ejecutar las pruebas con maven usa el comando
 
 ```bash
-  mvn test
+mvn test
 ```
 
 ![Prueba](img/figura05.png)
+
+## Desarrollo
 
 1. Crea una clase de prueba para EquipoRepository con el contenido que se muestra en la figura.
 
@@ -54,13 +56,7 @@ equipos.
          equipo.setNombre("Equipo prueba");
 
          equipo = repository.save(equipo);
-
-         assertNotNull(equipo.getId());
-      }
-   ```
-
-3. Agrega un método en EquipoRepository para buscar por nombre. Observa que el método puede devolver más de un elemento ya que la base de datos no tiene la restricción de unicidad, por lo que no podemos hacer ninguna suposición.
-
+## Desarrollo
    ![Query method](img/figura03.png)
 
    ```java

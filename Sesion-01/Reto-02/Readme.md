@@ -2,12 +2,16 @@
 
 ## Objetivo
 
- - Crear una entidad que representa la información de la tabla **partido**.
+ - Crear una entidad que represente la información de la tabla **partido**.
  - Crear un *repositorio* que permita trabajar con la entidad **Partido**.
 
 ## Requisitos
 
-- Haber terminado el Ejemplo 02
+- MySQL (o MariaDB)
+- IntelliJ IDEA Community Edition
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK) 17
+- Proyecto con modelo y repositorio (Proyecto del ejemplo 02)
 
 ## Desarrollo
 
@@ -16,6 +20,8 @@ En el Ejemplo 02 creaste tu primera entidad y repositorio. En ese ejercicio la c
 Para este reto deberás crear la entidad y repositorio de un partido.
 
 Deberás hacer uso de las anotaciones **@ManyToOne** y **@JoinColumn**.
+
+<br/>
 
 <details>
   <summary>Solución</summary>

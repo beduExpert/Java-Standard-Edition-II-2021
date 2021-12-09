@@ -17,10 +17,14 @@ En esta ocasión crearás una entidad sencilla y su repositorio con ayuda de Spr
 Una entidad (_@Entity_) debe ser un **POJO** (Plain Old Java Object) con las siguietnes características:
 
 1. Todos los accesores (**getters**).
+
 2. Mutadores (setters) para los atributos no finales.
+
 3. Debe [sobrecargar los métodos hashCode e equals de manera consistente](https://www.mkyong.com/java/java-how-to-overrides-equals-and-hashcode/).
 
 Para crear el repositorio, basta con crear una **interface** que extienda **CrudRepository**.
+
+<br/>
 
 ## Procedimiento
 
