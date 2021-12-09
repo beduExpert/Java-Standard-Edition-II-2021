@@ -18,7 +18,7 @@ A continuación deberás definir el proyecto, con el que trabajarás el resto de
 
 Sigue estas instrucciones:
 
-1. Clona el proyecto de la carpeta base.
+1. Clona el proyecto de la carpeta [base](./base).
 
 2. A partir de los siguientes diagramas crea las entidades, los cuales serán utilizados como modelos.
 
