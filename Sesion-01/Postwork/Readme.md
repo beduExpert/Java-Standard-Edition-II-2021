@@ -1,18 +1,18 @@
 
 # Postwork 01: Gestión de bases de datos
 
-## Objetivo
+## 🎩 Objetivo
 
 - Practicar las consultas CRUD sobre la base de datos.
 - Crear las entidades y repositorios que usaremos para nuestro proyecto personal.
 
-## Requisitos
+## 🎯 Requisitos
 
 - MySQL instalado y configurado
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK) 17
 
-## Desarrollo
+## 🚀 Desarrollo
 
 A continuación deberás definir el proyecto, con el que trabajarás el resto de tus postwork, además servirá como proyecto personal.
 

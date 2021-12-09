@@ -1,17 +1,17 @@
 # Postwork Sesión 02: Cálculo de promedios mediante hilos 
 
-## Objetivo 
+## 🎩 Objetivo 
 
 - Practicar el uso de hilos con Java.
 - Calcular promedios a través de múltiples hilos en tu proyecto personal.
 
-## Requisitos 
+## 🎯 Requisitos 
 
 - MySQL instalado y configurado
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK) 17
 
-## Desarrollo
+## 🚀 Desarrollo
 
 Completa las siguientes instrucciones para completar tu segundo postwork:
 
