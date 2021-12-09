@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-- Cambiar la implementación del Reto 1 para que use la interfaz Runnable en lugar de la clase Thread.
+- Emplear un Runnable de Java para la creación de una aplicación simple que realice tareas en diferentes hilos.
 
 ## Requisitos
 
