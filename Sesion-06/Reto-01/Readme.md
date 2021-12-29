@@ -2,11 +2,20 @@
 
 ## Objetivos
 
-* Crear una clase que convierta entre dos tipos distingos 
+* Crear una clase que convierta entre dos tipos distingos
+
+## Requisitos
+
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK) 17
+
+## Desarrollo
 
 En el Ejercicio 1 creamos una clase que puede almacenar un objeto genérico.
 
 Para este ejercicio crea una clase que permita convertir un objeto cualquiera a una representación de string.
+
+<br/>
 
 <details>
   <summary>Solución</summary>

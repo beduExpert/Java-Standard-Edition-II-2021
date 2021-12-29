@@ -2,13 +2,22 @@
 
 ## Objetivos
 
-* Crear un método estático para convertir arbitráriamente 
+* Crear un método estático para convertir arbitráriamente
+
+## Requisitos
+
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK) 17
+
+## Desarrollo
 
 En el Ejercicio 2 creamos una clase que aprovecha el método toString de Object.
 
 Repite este comportamiento en un método estático.
 
-<!-- <details> -->
+<br/>
+
+<details>
   <summary>Solución</summary>
 
   1. Agrega una nueva prueba como se muestra

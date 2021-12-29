@@ -1,11 +1,21 @@
-## Reto 3
+# Reto 3
 
 ## Objetivos
 * Comprender las jerarquías de métodos genéricos
 
-## Tip
-  Puedes revisar el siguiente contenido [material](https://docs.oracle.com/javase/tutorial/java/generics/inheritance.html)
+## Requisitos
 
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK) 17
+
+## Desarrollo
+
+Para este ejercicio crea una jerarquía de clases genéricas, que requiera cierto tratamiento especial.
+
+**Tip** -> 
+Puedes revisar el siguiente contenido [material](https://docs.oracle.com/javase/tutorial/java/generics/inheritance.html)
+
+<br/>
 
 <details>
   <summary>Solución</summary>
