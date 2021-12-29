@@ -1,7 +1,6 @@
+# :wave:  Sesión 07: Microservicios
 
-## Sesión 07: Microservicios
-
-### OBJETIVOS 
+## 🎯  Objetivo de la sesión:
 
  - Conocer el concepto de microservicios.
  - Conocer la motivación de los microservicios.
@@ -10,14 +9,30 @@
  - Comunicación de los microservicios
  - Reactive en microservicios
 
-#### ORGANIZACION DE LA CLASE 
+## ⚙ Requisitos
 
-- Tema que veran en el ejemplo
+- MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
+- IntelliJ IDEA Community Edition
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK)
 
-	- [Ejemplo 01](Ejemplo-01)
-	- [Reto 01](Reto-01)
-	- [Ejemplo 02](Ejemplo-02)
-	- [Reto 02](Reto-02)
-	- [Ejemplo 03](Ejemplo-03)
-	- [Reto 03](Reto-03)
+## Organización de la clase 
 
+- Usar MicroProfile para crear un microservicio
+
+	- [Ejemplo 01](./Ejemplo-01/Readme.md)
+	- [Reto 01](./Reto-01/Readme.md)
+
+- Usar Spring boot para crear un microservicio
+
+	- [Ejemplo 02](./Ejemplo-02/Readme.md)
+	- [Reto 02](./Reto-02/Readme.md)
+
+- Usar Spring boot WebFlux para crear un microservicio
+
+	- [Ejemplo 03](./Ejemplo-03/Readme.md)
+	- [Reto 03](./Reto-03/Readme.md)
+
+
+- Postwork
+	- [Postwork](././Postwork/Readme.md)
