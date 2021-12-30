@@ -13,7 +13,7 @@
 
 ## 🚀 Desarrollo
 
-Completa las siguientes instrucciones para completar el cuarto postwork:
+Completa las siguientes instrucciones para completar el séptimo postwork:
 
 1. Clona el proyecto del Reto 03: 
 

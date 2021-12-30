@@ -23,7 +23,7 @@ Crea una implementación del algoritmo [Merge Sort](https://www.tutorialspoint.c
 
 <br/>
 
-Completa las siguientes instrucciones para completar el cuarto postwork:
+Completa las siguientes instrucciones para completar el sexto postwork:
 
 1. Utiliza el proyecto de postwork 3.
 

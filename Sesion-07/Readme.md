@@ -11,7 +11,7 @@
 
 ## ⚙ Requisitos
 
-- MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
+- MongoDB o MongoDB Atlas
 - IntelliJ IDEA Community Edition
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK)
