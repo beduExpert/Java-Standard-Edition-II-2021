@@ -18,6 +18,10 @@
 	- [Ejemplo 01](./Ejemplo-01/Readme.md)
 	- [Reto 01](./Reto-01/Readme.md)
 
+- Refactorización de código
+
+	- [Ejemplo 02](./Ejemplo-02/Readme.md)
+
 - Postwork
 
 	- [Postwork](././Postwork/Readme.md)
