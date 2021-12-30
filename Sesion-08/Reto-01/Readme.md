@@ -1,10 +1,29 @@
 ## Reto 1
 
-### Objetivos
-* Refactorizar la clase QuickSortAlgorithm para que implemente los principios de código limpio 
+## Objetivos
 
+* Refactorizar la clase QuickSortAlgorithm para que implemente los principios de código limpio y buenas practicas.
 
-En esta ocasión partimos de un código que cumple con el requisito funcional, pero es poco legible.
+## Requisitos
+
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK) 17
+
+## Desarrollo
+
+Para completar este reto, necesitas aplicar las buenas practicas aprendidas en el ejemplo 01 de está seción.
+
+En la siguiente dirección encontraras el proyecto con el que trabajarás en este reto. [Proyecto](./codigo).
+
+_Nota:_ El código cumple con el requisito funcional, pero es poco legible, te recomendamos moficicar los siguiente:
+
+  - Usa nombres significativos.
+
+  - Elimina estructuras complicadas de código.
+
+  - Refactoriza a métodos privados así como cualquier elemento de lógica que veas compleja.
+
+<br/>
 
 <details>
   <summary>Solución</summary>
@@ -26,7 +45,9 @@ En esta ocasión partimos de un código que cumple con el requisito funcional, p
             <li> y := listaOrdenada </li>
         </ul>
       </li>
+      <br/>
       <li><strong>Programa para interfaces, no para clases concretas</strong> Cambia el uso de ArrayList<T> por List<T>.</li>
+      <br/>
       <li><strong>KISS + DRY</strong> Elimina estructuras complicadas del código. 
         <ul>
           <li> El ciclo de selección de elementos no ocupa el valor del índice (i), por lo que se puede reemplazar por un ciclo <em>for(Number elemento : listaOriginal)<em></li>
@@ -35,17 +56,20 @@ En esta ocasión partimos de un código que cumple con el requisito funcional, p
           <li> Opcionalmente, podemos hacer la separación y ordenamiento de las sublistas en una única operación.</li>
         </ul>
       </li>
-      <li> <strong>SRP</strong> Refactoriza a métodos privados cualquier elemento de lógica complicada. De este modo, si cambiamos la estrategia no deberemos modificar el cuerpo de la función principal.
-
-         <ul>
-           <li> La asignación del pivote puede no ser clara en una primera lectura</li>
-           <li> Opcionalmente, si usaste programación funcional para filtrar la lista, puedes extraer la lógica a una HOF para mejorar la legibilidad</li>
-         </ul>
+      <br/>
+      <li> 
+        <strong>SRP</strong> Refactoriza a métodos privados cualquier elemento de lógica complicada. De este modo, si cambiamos la estrategia no deberemos modificar el cuerpo de la función principal.
+        <ul>
+          <li> La asignación del pivote puede no ser clara en una primera lectura</li>
+          <li> Opcionalmente, si usaste programación funcional para filtrar la lista, puedes extraer la lógica a una HOF para mejorar la legibilidad</li>
+        </ul>
      </li>
   </ol>
+  <br/>
 
   <p>
     Si aplicamos todo esto, el resultado final será el siguiente:
+  </p>
 
 ```java
 package com.example.BP.retos;
@@ -88,11 +112,12 @@ public class QuickSortAlgorithm {
         return lista.stream().filter(predicate).collect(Collectors.toList());
     }
 }
-
 ```
 
-
-  </p>
-
-
 </details>
+
+
+<br/>
+<br/>
+
+[Siguiente ](../Ejemplo-02/Readme.md)(Ejemplo 02)
