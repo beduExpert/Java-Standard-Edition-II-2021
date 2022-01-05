@@ -25,7 +25,7 @@ Crea una implementación del algoritmo [Merge Sort](https://www.tutorialspoint.c
 
 Completa las siguientes instrucciones para completar el sexto postwork:
 
-1. Utiliza el proyecto de postwork 3.
+1. Utiliza el proyecto de postwork 5.
 
 2. Dentro del package tools crea la clase MergeSortAlgorithm. La cual estará encargada de ordenar de dos maneras diferentes y mezclar los dos ordenamientos.
 
