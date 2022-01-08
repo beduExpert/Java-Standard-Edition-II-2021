@@ -31,7 +31,7 @@
 
 ## 💻 Proyecto
 
-
+- Aplicación funcional que permita calcular el promedio de las calificaciones de un Curso dado.
 
 <br/>
 
