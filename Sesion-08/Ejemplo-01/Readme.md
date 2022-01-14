@@ -3,6 +3,11 @@
 ## Objetivos
 * Aplicar los principios de buenas prácticas para elevar la mantenibilidad y legibilidad del código
 
+## ⚙ Requisitos
+
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK)
+
 ## Procedimiento
 
 ### Análisis

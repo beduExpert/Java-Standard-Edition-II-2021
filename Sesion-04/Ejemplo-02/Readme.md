@@ -5,7 +5,7 @@
 
 ## Requisitos
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 11 y 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 Basándonos en el sistema de medición del ejemplo 1, haremos los cambios necesarios para que emplee la API Future de Java. Para ello: 

@@ -1,11 +1,11 @@
 # Reto 01: Cálculo de las ganancias diarias para un conjunto de franquicias
 
 ## Objetivo
-- Aplicar el procesamiento paralelo para acelerar el cálculo de la suma del total de ganancias obtenidas por una cadena de restaurantes por todas sus sucursales.
+- Aplicar el procesamiento paralelo para acelerar el cálculo de la suma del total de ganancias obtenidas por una cadena de restaurantes en todas sus sucursales.
 
 ## Requisitos
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 11 y 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 Una conocida cadena de hamburguesas quiere realizar cambios en su infraestructura empleando el procesamiento paralelo para acelerar el cálculo de las ganancias diarias, sumando las ganancias obtenidas por cada una de sus sucursales, las cuales tienen un identificador numérico del 0 al 1000.

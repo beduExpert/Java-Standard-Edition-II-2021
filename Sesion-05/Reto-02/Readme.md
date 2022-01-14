@@ -4,6 +4,10 @@
 * Reafirmar la comprensión de las interfaces Project Reactor 
 * Reafirmar el conocimiento de programación funcional
 
+## Requisitos
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK)
+
 En el Ejercicio 2 partimos de un objeto Flux<Integer> para obtener su suma.
 
 En esta ocasión debemos elevar al cubo cada elemento y sumar sólo los que sean menores a 50.

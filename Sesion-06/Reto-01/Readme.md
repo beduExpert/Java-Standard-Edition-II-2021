@@ -2,12 +2,12 @@
 
 ## Objetivos
 
-* Crear una clase que convierta entre dos tipos distingos
+* Crear una clase que convierta entre dos tipos distintos
 
 ## Requisitos
 
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 

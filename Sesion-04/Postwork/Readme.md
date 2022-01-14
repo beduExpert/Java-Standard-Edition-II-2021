@@ -8,7 +8,7 @@
 ## 🎯 Requisitos 
 
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 11 y 17
+- JDK (o OpenJDK)
 - Postwork de la sesión anterior
 
 ## 🚀 Desarrollo

@@ -6,7 +6,7 @@
 ## Requisitos
 
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 
@@ -26,7 +26,7 @@ Estos nuevos endpoint se definirán en DemoController con los nombres de metodos
 
 <br/>
 
-<!-- <details> -->
+<details>
   <summary>Solución</summary>
 
 1. Agrega el método **getEmpleadoById** al demo controller.

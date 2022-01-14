@@ -5,6 +5,9 @@
 - Reafirmar la comprensión de las interfaces RxJava 
 - Reafirmar el conocimiento de programación funcional
 
+## Requisitos
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK)
 
 En el Ejercicio 1 partimos de un objeto `Observable<Integer>` para obtener su suma.
 

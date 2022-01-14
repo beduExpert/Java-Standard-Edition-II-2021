@@ -4,6 +4,10 @@
 
 * Reafirmar el conocimiento de programación reactiva con servicios intermedios.
 
+## Requisitos
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK)
+
 <br/>
 
 En el Ejercicio 3 usamos un servicio intermedio para transformar un Flux<PersonaEntity> en un Flux<String>.

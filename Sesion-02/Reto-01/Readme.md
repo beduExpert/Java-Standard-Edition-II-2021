@@ -5,7 +5,7 @@
 
 ## Requisitos
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 Deberás desarrollar una pequeña aplicación que mediante 2 hilos (uno de usuario y uno daemon) realice un par de tareas:

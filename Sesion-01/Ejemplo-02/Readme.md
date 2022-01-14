@@ -8,7 +8,7 @@
 
 - Apache Maven 3.8.4 o superior
 - Manejador de base de datos, de preferencia MySQL o MariaDB
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
  

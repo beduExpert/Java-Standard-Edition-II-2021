@@ -4,11 +4,16 @@
 
 * Aplicar los principios de buenas prácticas para elevar la mantenibilidad y legibilidad del código.
 
+## ⚙ Requisitos
+
+- IntelliJ IDEA Community Edition
+- JDK (o OpenJDK)
+
 ## Procedimiento
 
 ### Análisis
 
-1. Clona el proyecto donde encontrarás una clase llamada ClaseEspaguetti.
+1. Clona el proyecto [Proyecto base](./codigo) donde encontrarás una clase llamada ClaseEspaguetti.
 
 2. Analiza el código para identificar todo lo que está haciendo.
     

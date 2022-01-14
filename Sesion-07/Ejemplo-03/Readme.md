@@ -7,8 +7,8 @@
 ## Requisitos
 
 - IntelliJ IDEA Community Edition
-- Maven
-- JDK 11
+- Apache Maven 3.8.4 o superior
+- JDK (o OpenJDK)
 - Postman
 
 ## Procedimiento

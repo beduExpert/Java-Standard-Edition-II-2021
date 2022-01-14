@@ -5,7 +5,7 @@
 
 ## Requisitos
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 11 y 17
+- JDK (o OpenJDK)
 - Reto 01
 
 ## Desarrollo

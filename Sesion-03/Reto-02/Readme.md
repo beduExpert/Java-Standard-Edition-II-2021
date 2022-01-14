@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-- Realizar una High Order Function un proceso para recibir un conjunto de enteros y realizar la suma de todos ellos.
+- Realizar una High Order Function para recibir un conjunto de enteros y realizar la suma de todos ellos.
 
 ## Requisitos
 

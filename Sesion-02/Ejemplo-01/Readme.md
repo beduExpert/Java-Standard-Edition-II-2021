@@ -8,7 +8,7 @@
 ## Requisitos
 
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 

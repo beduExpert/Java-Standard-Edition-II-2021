@@ -5,7 +5,7 @@
 
 ## Requisitos
 - IntelliJ IDEA Community Edition
-- JDK (o OpenJDK) 11 y 17
+- JDK (o OpenJDK)
 
 ## Desarrollo
 Como ya vimos, un **event loop** es un hilo que se ejecuta continuamente y recibe eventos que son pasados a métodos diferentes que son conocidos como event handlers o workers. 

@@ -7,7 +7,7 @@
 ## Requisitos
 
 - Apache Maven 3.8.4 o superior
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 - Proyecto con pruebas unitarias (Proyecto del ejemplo 02)
 
 ## Desarrollo

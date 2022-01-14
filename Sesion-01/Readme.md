@@ -15,7 +15,7 @@ datos) y objetos (POO/Java).
 - MySQL (o MariaDB) en el equipo y tener las credenciales de _root_
 - IntelliJ IDEA Community Edition
 - Apache Maven 3.8.4 o superior
-- JDK (o OpenJDK) 17
+- JDK (o OpenJDK)
 
 ## 🎩  Objetivos 
 
