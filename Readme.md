@@ -34,12 +34,13 @@
 - Aplicación funcional que permita calcular el promedio de las calificaciones de un Curso dado.
 
 <br/>
-
+--- 
 > Nota para el experto:
-|>
-|> Se Agregaron algunas anotaciones en este formato con el fin de garantizar la 
-|> compatibilidad entre las versiones 8 y 11 de java, estas notas están presentes 
-|> en este formato antes del código.
+>
+> Se Agregaron algunas anotaciones en este formato con el fin de garantizar la 
+> compatibilidad entre las versiones 8 y 11 de java, estas notas están presentes 
+> en este formato antes del código.
+---
 
 ## :bookmark_tabs: ORGANIZACIÓN DE MÓDULO 
  
