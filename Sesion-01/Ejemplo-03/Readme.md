@@ -1,4 +1,4 @@
-# Ejemplo 03
+# Ejemplo 03 - Escribir y obtener información en la base de datos.
 
 ## Objetivo
 

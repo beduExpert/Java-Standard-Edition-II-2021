@@ -1,4 +1,4 @@
-# Ejemplo 02
+# Ejemplo 02 - Configuración de una Base de datos
 
 ## Objetivo
 
