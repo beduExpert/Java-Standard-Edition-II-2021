@@ -25,19 +25,19 @@ datos) y objetos (POO/Java).
 
 ## Organización de la clase 
 
-- Creación y configuración de una base de datos y conexión mediante Spring Data JPA
+- JPA Creación de entidades y repositorios
 
 	- [Ejemplo 01](./Ejemplo-01/Readme.md)
 	- [Reto 01](./Reto-01/Readme.md)
 
 
-- Creación de entidades y repositorios
+- Creación y Configuración de una base de datos
 
 	- [Ejemplo 02](./Ejemplo-02/Readme.md)
 	- [Reto 02](./Reto-02/Readme.md)
 	
 	
-- Pruebas de integración a reposotorios con JUnit
+- Creación de un servidor web con conexión a una base de datos
 
 	- [Ejemplo 03](./Ejemplo-03/Readme.md)
 	- [Reto 03](./Reto-03/Readme.md)
