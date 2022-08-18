@@ -2,100 +2,153 @@
 
 ## Objetivo
 
-- Hacer pruebas con JUnit para verificar el correcto funcionamiento de los repositorios.
+- Manipular la base de datos desde la aplicación de Java.
 
 ## Requisitos
 
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK)
 
-## Maven
+## Creación de la entidad
 
-En este ejercicio harás uso de pruebas de integración (Spring + JUnit) para verificar el funcionamiento del repositorio de
-equipos.
+Vamos a crear la clase que servirá de modelo con una tabla de la base de datos.
 
-**_Nota_**: Para ejecutar las pruebas con maven usa el comando
+1. Creamos el archivo `src/main/java/com/example/accessingdatamysql/User.java` para definir a los usuarios de la siguiente forma:
 
-```bash
-mvn test
+```java
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity // para crear una tabla a partir de la clase
+public class User {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
+
+    private String name;
+
+    private String email;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
 ```
 
-![Prueba](img/figura05.png)
+## Creando el repositorio
 
-## Desarrollo
+Ahora crearemos el repositorio para el CRUD de la entidad `User`
 
-1. Crea una clase de prueba para EquipoRepository con el contenido que se muestra en la figura.
+1. Creamos la interfaz `src/main/java/com/example/accessingdatamysql/UserRepository.java` con el siguiente código:
 
-   ![Prueba](img/figura01.png)
+```java
+import org.springframework.data.repository.CrudRepository;
 
-2. Agrega una prueba donde crees un equipo y lo guardes como se muestra.
+import com.example.demo.User;
 
-   ![Guardar](img/figura02.png)
+public interface UserRepository extends CrudRepository<User, Integer> {
 
-   Esta prueba verifica que el objeto, una vez guardado, tiene un Id asignado por la base de datos.
+}
+```
 
-   ```java
-   @SpringBootTest
-   @ComponentScan(basePackages = "org.bedu.javase2.ejemplo.ejemplo1")
-   @ExtendWith(SpringExtension.class)
-   @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-   class EquipoRepositoryTest {
+En este caso dejaremos únicamente los métodos que se crean por default al extender `CrudRepository`.
 
-      @Autowired
-      private EquipoRepository repository;
+## Creando un controlador 
 
-      @BeforeAll
-      void cleanDatabase(){
-         repository.deleteAll();
-      }
+Vamos a crear un controlador que se encargue de manejar las peticiones HTTP de la aplicación.
 
-      @Test
-      @DisplayName("Puede guardar")
-      void canSave(){
-         Equipo equipo = new Equipo();
-         equipo.setNombre("Equipo prueba");
+1. Creamos la clase `src/main/java/com/example/accessingdatamysql/MainController.java` y agregamos el siguiente código:
 
-         equipo = repository.save(equipo);
-## Desarrollo
-   ![Query method](img/figura03.png)
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-   ```java
-   Iterable<Equipo> findAllByNombre(String nombre);
-   ```
+@Controller // La clase funciona como controlador
+@RequestMapping(path="/demo") // la URL's comienza con /demo 
+public class MainController {
+    @Autowired // Obtiene el repositorio de usuario que se 
+    // genero automaticamente
+    private UserRepository userRepository;
 
-4. Agrega una nueva prueba para verificar el comportamiento.
+    @PostMapping(path="/add") // ONLY POST Requests
+    public @ResponseBody String addNewUser (@RequestParam String name
+            , @RequestParam String email) {
+        // @ResponseBody means the returned String is the response, not a view name
+        // @RequestParam means it is a parameter from the GET or POST request
 
-   ![Prueba dos](img/figura04.png)
+        User n = new User();
+        n.setName(name);
+        n.setEmail(email);
+        userRepository.save(n);
+        return "Saved";
+    }
 
-   ```java
-   @Test
-   @DisplayName("Busca por nombre")
-   void canFindByName(){
-      final String nombre = "Prueba búsqueda";
+    @GetMapping(path="/all") // ONLY GET Requests
+    public @ResponseBody Iterable<User> getAllUsers() {
+        // This returns a JSON or XML with the users
+        return userRepository.findAll();
+    }
+}
+```
 
-      Equipo equipo = new Equipo();
-      equipo.setNombre(nombre);
+## Probando nuestra aplicación 
 
-      repository.save(equipo);
+1. Ejecutamos nuestra aplicación, lo que activará el servidor para estar pendiente de las peticiones.
 
-      Iterable<Equipo> listaEquipos = repository.findAllByNombre(nombre);
-      assertTrue(listaEquipos.iterator().hasNext());
+2. Probamos el método POST usando `curl`
 
-      Equipo equipoRecuperado = listaEquipos.iterator().next();
-      assertEquals(equipo, equipoRecuperado);
-   ```
+```bash
+$ curl localhost:8080/demo/add -d name=First -d email=someemail@someemailprovider.com
+``` 
 
-5. Ejecuta de nuevo el comando **mvn test**, comprueba que los test se ejecutan correctamente.
+el resultado debe ser
+ 
+```bash
+Saved
+```
 
-   ![Prueba dos](img/figura06.png)
+3. Probamos el método GET usando `curl`
 
-6. Consulta los registros de la tabla **equipos**, comenta los resultados.
+```bash
+$ curl 'localhost:8080/demo/all'
+``` 
 
-   ![Prueba dos](img/figura07.png)
+el resultado debe ser
+ 
+```bash
+[{"id":1,"name":"First","email":"someemail@someemailprovider.com"}]
+```
 
 <br/>
 
-¡Felicidades! Creaste tu primer set de pruebas.
+¡Felicidades! Haz terminado los ejemplos del día de hoy.
 
 <br/>
 
