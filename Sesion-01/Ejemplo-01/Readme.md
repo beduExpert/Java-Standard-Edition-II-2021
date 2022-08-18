@@ -29,6 +29,8 @@ Comenzaremos generando un proyecto utilizando Spring Initializr.
 
 7. La versión de Java que usaremos sera la 11.
 
+8. Agregamos las dependencias **Spring Data JPA** y **H2 Database**.
+
 Debe de quedar como la configuración de la imagen siguiente:
 
 ![Spring initializr](img/si1.png)
