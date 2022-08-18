@@ -54,7 +54,7 @@ mvn test
 
             Integer expected = -27;
 
-            Assertions.assertThat(ejemplo3.manipular(conjunto, i -> i < 0 ? i:-i)).isEqualTo(expected);
+           assertEquals(ejemplo3.manipular(conjunto, i -> i < 0 ? i:-i),expected);
 
         }
       }
