@@ -31,7 +31,7 @@ Comenzaremos generando un proyecto utilizando Spring Initializr.
 
 Debe de quedar como la configuración de la imagen siguiente:
 
-![Spring initializr](img/si1)
+![Spring initializr](img/si1.png)
 
 <br/>
 
