@@ -2,11 +2,10 @@
 
 ## Objetivo
 
-- Realizar las correcciones necesarias en la aplicación para poder hacer un número mayor de operaciones adicionales a la consulta.
+- Prácticar el uso de JPA
 
 ## Requisitos
 
-- MySQL (o MariaDB)
 - IntelliJ IDEA Community Edition
 - Apache Maven 3.8.4 o superior
 - JDK (o OpenJDK)
@@ -14,13 +13,11 @@
 
 ## Desarrollo
 
-En el Ejemplo 01 agregamos los datos para conectarnos a la base de datos con el usuario **_usuario_**. Sin embargo este es un usuario limitado, si revisas el script de la base de datos te darás cuenta de que sólo puede hacer consultas.
-
-En este reto deberás modificar los datos de conexión para que la aplicación pueda hacer las operaciones **CRUD** (Create, Read, Update, Delete).
+Para este reto debes extender la aplicación que generamos en el ejemplo anterior, agregando una nueva entidad **Product** con los campos: `id`, `name` y `price`. Esta entidad debe contar con su propio repositorio con métodos de búsqueda por id y nombre. Agrega también algunas pruebas de éstos métodos a la clase principal.
 
 <br/>
 
-<details>
+<!-- <details>
   <summary>Solución</summary>
 
  1. Abre el archivo **application.properties**.
@@ -42,7 +39,7 @@ En este reto deberás modificar los datos de conexión para que la aplicación p
     </p>
 
 
-</details>
+</details> -->
 
 <br/>
 
