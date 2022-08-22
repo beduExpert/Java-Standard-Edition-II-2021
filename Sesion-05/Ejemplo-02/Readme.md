@@ -42,13 +42,13 @@ mvn test
     @DisplayName("Suma los elementos y regresa Single")
     void sumaElementos() {
         Ejemplo2.sumarSingle()
-                .subscribe(s -> assertThat(s).isEqualTo(21));
+                .subscribe(s -> assertEquals(21,s));
     }
 
     @Test
     @DisplayName("Suma los elementos y regresa valor (bloqueante)")
     void sumaElementosBloqueante() {
-        assertThat(Ejemplo2.sumar()).isEqualTo(21);
+        assertEquals(21,Ejemplo2.sumar());
     }
     ```
 
@@ -59,17 +59,17 @@ mvn test
     **RxJavaObservableGenerator** es una clase que genera un observable a partir de una lista de números del 1 al 6.
 
     ```java
-    static  Single<Integer> sumarSingle(){
-       return ReactorFluxGenerator
-               .fluxStream()
-               .reduce(0,(a,b) -> a + b);
+    static Mono<Integer> sumarSingle(){
+        return ReactorFluxGenerator
+                .fluxStream()
+                .reduce(0,(a,b) -> a + b);
     }
 
     static Integer sumar(){
-       return ReactorFluxGenerator
-               .fluxStream()
-               .reduce(0,(a,b) -> a + b)
-               .block();
+        return ReactorFluxGenerator
+                .fluxStream()
+                .reduce(0,(a,b) -> a + b)
+                .block();
     }
     ```
 

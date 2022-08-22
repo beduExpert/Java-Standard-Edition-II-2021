@@ -43,13 +43,13 @@ mvn test
     @DisplayName("Suma los elementos y regresa Single")
     void sumaElementos() {
         Ejemplo1.sumarSingle()
-                .subscribe(s -> assertThat(s).isEqualTo(21));
+                .subscribe(s -> assertEquals(21,s));
     }
 
     @Test
     @DisplayName("Suma los elementos y regresa valor (bloqueante)")
     void sumaElementosBloqueante() {
-        assertThat(Ejemplo1.sumar()).isEqualTo(21);
+        assertEquals(21,Ejemplo1.sumar());
     }
     ```
 
