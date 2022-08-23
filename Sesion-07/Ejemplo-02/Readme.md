@@ -33,11 +33,12 @@
     Agrega la dependencia de **lombok**
 
     ```xml
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.22</version>
-    </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>compile</scope>
+        </dependency>
     ```
 
 3. Crear un paquete llamado "controller" el cual contenga la clase "DemoController" con el siguiente codigo:
